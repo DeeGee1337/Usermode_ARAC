@@ -1,3 +1,5 @@
+#pragma once
+
 #include "globals.hpp"
 
 #define _WIN32_DCOM
@@ -275,6 +277,6 @@ DWORD GetRealOSVersion(DWORD &minorver) {
     }
     RTL_OSVERSIONINFOW rovi = { 0 };
 
-    minorver = rovi.dwMinorVersion;
+    //minorver = rovi.dwMinorVersion;
     return rovi.dwBuildNumber;
 }
