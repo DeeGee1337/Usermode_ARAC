@@ -11,8 +11,11 @@
 #include <winnt.h>
 #include <cstring>
 #include <algorithm>
+#include <comdef.h>
+#include <Wbemidl.h>
 
 #include "processes.hpp"
+#include "HWID.hpp"
 
 namespace sdk
 {
@@ -20,7 +23,7 @@ namespace sdk
     {
         NONE        = 0,
         Windowname  = 1,
-        Memor       = 2,
+        Memory      = 2,
         Module      = 3,
         RDATA       = 4,
         HWID        = 5

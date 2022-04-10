@@ -36,7 +36,7 @@ std::wstring print_processes(std::wstring searchinput)
     {
         std::wcout << "\n\n=====================================================" << std::endl;
         std::wcout << "\nPROCESS NAME: " << pe32.szExeFile << std::endl; //NEEDE BECAUSE OF UNICODE !!!!! https://stackoverflow.com/questions/37787274/szexefile-in-processentery32-stucture-gives-a-weird-value
-        std::wcout << "\n\n=====================================================" << std::endl;
+        std::wcout << "=====================================================" << std::endl;
 
         if (pe32.szExeFile)
         {

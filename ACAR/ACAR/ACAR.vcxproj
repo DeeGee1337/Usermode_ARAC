@@ -143,6 +143,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="globals.hpp" />
+    <ClInclude Include="HWID.hpp" />
     <ClInclude Include="processes.hpp" />
   </ItemGroup>
   <ItemGroup>
