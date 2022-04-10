@@ -28,6 +28,18 @@ namespace memory
                         std::wcout << "\t" << szModName << std::endl;
                         results++;
                     }
+
+                    if (wcsstr(szModName, L"NativeHelper.dll") || wcsstr(szModName, L"ReClass.NET.exe")) //Reclass Detection
+                    {
+                        std::wcout << "\t" << szModName << std::endl;
+                        results++;
+                    }
+
+                    if (wcsstr(szModName, L"ida64.dll") || wcsstr(szModName, L"ida64.exe")) //Reclass Detection
+                    {
+                        std::wcout << "\t" << szModName << std::endl;
+                        results++;
+                    }
                 }
             }
         }

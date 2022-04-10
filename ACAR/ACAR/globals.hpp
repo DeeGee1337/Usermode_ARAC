@@ -22,6 +22,7 @@
 #include "processes.hpp"
 #include "HWID.hpp"
 #include "memory.hpp"
+#include "windowtitles.hpp"
 
 namespace sdk
 {
@@ -29,10 +30,10 @@ namespace sdk
     {
         NONE        = 0,
         Windowname  = 1,
-        Memory      = 2,
-        Module      = 3,
-        RDATA       = 4,
-        HWID        = 5
+        HWID        = 2,
+        Memory      = 3,
+        Module      = 4,
+        RDATA       = 5
     };
 
     std::vector<std::tuple<std::wstring, int, sdk::flags>> processes_tuple;

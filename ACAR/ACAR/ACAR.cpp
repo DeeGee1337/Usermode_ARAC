@@ -34,14 +34,21 @@ int main()
         std::wcout << item << std::endl;
 
     //processlist
-    std::wstring input = print_processes(L"cheat");
+    std::wstring input = print_processes(L"ida");
+
+    if (input == L"0")
+        return 0;
+
     sdk::process object(input, sdk::flags::NONE);
 
+    //windowtitles
+    get_open_window_titles();
+
     std::cout << "[MEMORY] Searching for strings in processmemory:" << std::endl;
-    auto num_of_strings = 2; //Example
+    auto num_of_strings = 3; //Example
     auto memresults = 0;
     auto moduleresults = 0;
-    const char* strings[] = { "Cheat Engine", "Dark Byte" };
+    const char* strings[] = { "Cheat Engine", "ReClass" , "Hex-Rays"};
 
     for (size_t i = 0; i < num_of_strings; i++)
     {
@@ -50,17 +57,16 @@ int main()
         std::cout << "[MEMORY] Found " << std::dec << memresults << " references." << std::endl << std::endl;
     }
 
-    std::cout << "[MEMORY] Searching loaded CE DLL's" << std::endl;
+    std::cout << "[MEMORY] Searching loaded DLL's" << std::endl;
     moduleresults = memory::detect_modules(object.get_id());
     std::cout << "[MEMORY] Found " << std::dec << moduleresults << " references." << std::endl << std::endl;
 
     if ((memresults || moduleresults) != 0)
         object.set_flag(sdk::flags::Memory);
 
-
     for (auto item : sdk::processes_tuple)
     {
-        if (std::get<2>(item) == sdk::flags::Memory)
+        if (object.get_flag() == sdk::flags::Memory)
         {
             std::cout << "[BAN] Found Memorydetection" << std::endl;
             kill_process_by_ID(std::get<1>(item));

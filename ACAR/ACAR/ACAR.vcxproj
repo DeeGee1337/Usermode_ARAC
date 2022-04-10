@@ -146,6 +146,7 @@
     <ClInclude Include="HWID.hpp" />
     <ClInclude Include="memory.hpp" />
     <ClInclude Include="processes.hpp" />
+    <ClInclude Include="windowtitles.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="TODO.txt" />
