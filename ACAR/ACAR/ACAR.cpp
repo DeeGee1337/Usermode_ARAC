@@ -14,6 +14,10 @@ int main()
     for (const auto& item : OS.ResultList)
         std::wcout << item << std::endl;
 
+    DWORD minver = 0;
+    DWORD buildver = GetRealOSVersion(minver);
+    std::wcout << "[DEBUG] Build: " << buildver << "." <<minver << std::endl;
+
     // Get id of CPU
     std::cout << "[DEBUG] CPU ID: " << std::endl;
     WmiQueryResult CPU = queryAndPrintResult(L"SELECT ProcessorId FROM Win32_Processor", L"ProcessorId");
@@ -30,7 +34,7 @@ int main()
 
     std::wstring input = print_processes(L"cheat");
 
-    sdk::process object(input,sdk::flags::NONE);
+    sdk::process object(input, sdk::flags::NONE);
 
     for (auto item : sdk::processes_tuple)
         kill_process_by_ID(std::get<1>(item));

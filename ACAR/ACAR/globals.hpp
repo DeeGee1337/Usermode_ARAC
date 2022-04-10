@@ -13,6 +13,7 @@
 #include <algorithm>
 #include <comdef.h>
 #include <Wbemidl.h>
+#include<stdio.h>
 
 #include "processes.hpp"
 #include "HWID.hpp"

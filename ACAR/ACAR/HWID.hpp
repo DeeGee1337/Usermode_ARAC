@@ -254,3 +254,27 @@ WmiQueryResult queryAndPrintResult(std::wstring query, std::wstring propNameOfRe
 //// Get desktops
 //std::cout << "[DEBUG] DESKTOP: " << std::endl;
 //queryAndPrintResult(L"SELECT * FROM Win32_DesktopMonitor ", L"DeviceId");
+
+typedef LONG NTSTATUS, * PNTSTATUS;
+#define STATUS_SUCCESS (0x00000000)
+
+typedef NTSTATUS(WINAPI* RtlGetVersionPtr)(PRTL_OSVERSIONINFOW);
+
+DWORD GetRealOSVersion(DWORD &minorver) {
+    HMODULE hMod = ::GetModuleHandleW(L"ntdll.dll");
+    if (hMod) {
+        RtlGetVersionPtr fxPtr = (RtlGetVersionPtr)::GetProcAddress(hMod, "RtlGetVersion");
+        if (fxPtr != nullptr) {
+            RTL_OSVERSIONINFOW rovi = { 0 };
+            rovi.dwOSVersionInfoSize = sizeof(rovi);
+            if (STATUS_SUCCESS == fxPtr(&rovi)) {
+                minorver = rovi.dwMinorVersion;
+                return rovi.dwBuildNumber;
+            }
+        }
+    }
+    RTL_OSVERSIONINFOW rovi = { 0 };
+
+    minorver = rovi.dwMinorVersion;
+    return rovi.dwBuildNumber;
+}
