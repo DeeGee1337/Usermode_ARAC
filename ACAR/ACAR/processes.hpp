@@ -154,18 +154,18 @@ void kill_process_by_ID(DWORD input_ID)
     HANDLE  hProcess;
     BOOL    fResult = FALSE;
 
-    std::wcout << "[PRCOESS] kill_process_by_ID: " << input_ID << std::endl;
+    std::wcout << "[PROCESS] kill_process_by_ID: " << input_ID << std::endl;
 
     if (dwProcessId == 0)
     {
-        printf("[PRCOESS] failed to get process id for %i\n", input_ID);
+        printf("[PROCESS] failed to get process id for %i\n", input_ID);
     }
 
     hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, dwProcessId);
 
     if (hProcess != NULL)
     {
-        printf("[PRCOESS] going to terminate process: %ld\n", dwProcessId);
+        printf("[PROCESS] going to terminate process: %ld\n", dwProcessId);
         fResult = TerminateProcess(hProcess, 0);
         WaitForSingleObject(hProcess, 500);
         CloseHandle(hProcess);

@@ -2,6 +2,8 @@
 
 int main()
 {
+    SetConsoleTitleA("DAPI - ACAR");
+
     std::cout << "DAPI - ACAR" << std::endl;
     std::cout << "  _      _      _" << std::endl;
     std::cout << ">(.)__ <(.)__ =(.)__" << std::endl;
@@ -43,6 +45,10 @@ int main()
 
     //windowtitles
     get_open_window_titles();
+
+    //Hackerconsole
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole, 10); //10 is green
 
     std::cout << "[MEMORY] Searching for strings in processmemory:" << std::endl;
     auto num_of_strings = 3; //Example
