@@ -35,7 +35,7 @@ namespace memory
                         results++;
                     }
 
-                    if (wcsstr(szModName, L"ida64.dll") || wcsstr(szModName, L"ida64.exe")) //Reclass Detection
+                    if (wcsstr(szModName, L"ida64.dll") || wcsstr(szModName, L"ida64.exe")) //IDA Detection
                     {
                         std::wcout << "\t" << szModName << std::endl;
                         results++;
