@@ -25,6 +25,7 @@
 #include "memory.hpp"
 #include "windowtitles.hpp"
 #include "filehandling.hpp"
+#include "patternscanner.hpp"
 
 namespace sdk
 {
