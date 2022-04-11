@@ -36,7 +36,7 @@ int main()
         std::wcout << item << std::endl;
 
     //processlist
-    std::wstring input = print_processes(L"ida");
+    std::wstring input = print_processes(L"elo");
 
     if (input == L"0")
         return 0;
