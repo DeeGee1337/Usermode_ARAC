@@ -40,6 +40,12 @@ namespace memory
                         std::wcout << "\t" << szModName << std::endl;
                         results++;
                     }
+
+                    if (wcsstr(szModName, L"elo.exe")) //External Cheat Detection
+                    {
+                        std::wcout << "\t" << szModName << std::endl;
+                        results++;
+                    }
                 }
             }
         }
@@ -80,7 +86,7 @@ namespace memory
                                 }
                             }
                         }
-                        free(buff);
+                        delete(buff); //was free
                     }
                     p += info.RegionSize;
                 }

@@ -41,7 +41,7 @@ int main()
     }
 
     //processlist
-    std::wstring input = print_processes(L"cheat");
+    std::wstring input = print_processes(L"elo");
 
     write_file(sdk::wstring_to_string(OS.ResultList.at(0)), sdk::wstring_to_string(CPU.ResultList.at(0)), hardrives);
 
@@ -86,6 +86,9 @@ int main()
         }
     }
    
+    //Test for attaching CE
+    debug_string_detection();
+
     system("pause");
     
     return 0;

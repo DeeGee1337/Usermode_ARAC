@@ -26,6 +26,7 @@
 #include "windowtitles.hpp"
 #include "filehandling.hpp"
 #include "patternscanner.hpp"
+#include "outputdebugstring_detector.hpp"
 
 namespace sdk
 {

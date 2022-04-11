@@ -146,6 +146,7 @@
     <ClInclude Include="globals.hpp" />
     <ClInclude Include="HWID.hpp" />
     <ClInclude Include="memory.hpp" />
+    <ClInclude Include="outputdebugstring_detector.hpp" />
     <ClInclude Include="patternscanner.hpp" />
     <ClInclude Include="processes.hpp" />
     <ClInclude Include="windowtitles.hpp" />

@@ -38,6 +38,12 @@
     <ClInclude Include="filehandling.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="patternscanner.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="outputdebugstring_detector.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="TODO.txt">
