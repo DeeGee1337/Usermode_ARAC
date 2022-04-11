@@ -51,10 +51,10 @@ int main()
     SetConsoleTextAttribute(hConsole, 10); //10 is green
 
     std::cout << "[MEMORY] Searching for strings in processmemory:" << std::endl;
-    auto num_of_strings = 3; //Example
+    auto num_of_strings = 4; //Example
     auto memresults = 0;
     auto moduleresults = 0;
-    const char* strings[] = { "Cheat Engine", "ReClass" , "Hex-Rays"};
+    const char* strings[] = { "Cheat Engine", "ReClass" , "Hex-Rays", "Aimbot"};
 
     for (size_t i = 0; i < num_of_strings; i++)
     {
