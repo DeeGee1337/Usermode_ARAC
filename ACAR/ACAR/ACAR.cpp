@@ -12,7 +12,7 @@ int main()
     // Get OS and partition
     std::cout << "[HWID] OS/PARTITION: " << std::endl;
     WmiQueryResult OS = queryAndPrintResult(L"SELECT * FROM Win32_OperatingSystem", L"Name");
-
+    
     for (const auto& item : OS.ResultList)
         std::wcout << item << std::endl;
 
@@ -78,7 +78,7 @@ int main()
             kill_process_by_ID(std::get<1>(item));
         }
     }
-
+   
     system("pause");
     
     return 0;
