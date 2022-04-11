@@ -142,6 +142,7 @@
     <ClCompile Include="ACAR.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="filehandling.hpp" />
     <ClInclude Include="globals.hpp" />
     <ClInclude Include="HWID.hpp" />
     <ClInclude Include="memory.hpp" />

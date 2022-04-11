@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <fstream>
 #include <optional>
 #include <windows.h>
 #include <tuple>
@@ -23,6 +24,7 @@
 #include "HWID.hpp"
 #include "memory.hpp"
 #include "windowtitles.hpp"
+#include "filehandling.hpp"
 #include "patternscanner.hpp"
 
 namespace sdk
@@ -36,6 +38,12 @@ namespace sdk
         Module      = 4,
         RDATA       = 5
     };
+
+    std::string wstring_to_string(std::wstring input)
+    {
+        std::string str(input.begin(), input.end());
+        return str;
+    }
 
     std::vector<std::tuple<std::wstring, int, sdk::flags>> processes_tuple;
     
