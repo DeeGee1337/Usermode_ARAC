@@ -6,3 +6,6 @@ List the modules and threads associated with this process in Snapshotfunc
 Midprio:
 
 Lowprio:
+
+Ablage:
+Get-ChildItem -Filter *.hpp -Recurse | Get-Content | Measure-Object -Word -Line -Character
