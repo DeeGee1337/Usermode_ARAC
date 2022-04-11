@@ -23,6 +23,7 @@
 #include "HWID.hpp"
 #include "memory.hpp"
 #include "windowtitles.hpp"
+#include "patternscanner.hpp"
 
 namespace sdk
 {
