@@ -32,14 +32,21 @@ int main()
     std::cout << "[HWID] HDD's/SSD's: " << std::endl;
     WmiQueryResult HDD_SSD = queryAndPrintResult(L"SELECT SerialNumber FROM Win32_PhysicalMedia", L"SerialNumber");
 
+    std::string hardrives;
+
     for (const auto& item : HDD_SSD.ResultList)
+    {
         std::wcout << item << std::endl;
+        hardrives = hardrives.append(sdk::wstring_to_string(item));
+    }
 
     //processlist
-    std::wstring input = print_processes(L"elo");
+    std::wstring input = print_processes(L"cheat");
 
-    if (input == L"0")
-        return 0;
+    write_file(sdk::wstring_to_string(OS.ResultList.at(0)), sdk::wstring_to_string(CPU.ResultList.at(0)), hardrives);
+
+    //if (input == L"0")
+      //  return 0;
 
     sdk::process object(input, sdk::flags::NONE);
 
@@ -54,7 +61,7 @@ int main()
     auto num_of_strings = 3; //Example
     auto memresults = 0;
     auto moduleresults = 0;
-    const char* strings[] = { "Cheat Engine", "ReClass" , "Hex-Rays"};
+    const char* strings[] = { "Cheat Engine", "ReClass" , "Hex-Rays", "Aimbot"};
 
     for (size_t i = 0; i < num_of_strings; i++)
     {

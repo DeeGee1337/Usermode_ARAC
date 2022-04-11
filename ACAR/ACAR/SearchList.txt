@@ -1,1 +1,5 @@
 OS: Win CPU: 1337 Harddrive: Nig
+OS: Microsoft Windows 11 Pro|C:\Windows|\Device\Harddisk1\Partition3 CPU: BFEBFBFF000906E9 Harddrive: S1D9NSAFB13892D     
+OS: Microsoft Windows 11 Pro|C:\Windows|\Device\Harddisk1\Partition3 CPU: BFEBFBFF000906E9 Harddrive: S1D9NSAFB13892D     
+OS: Microsoft Windows 11 Pro|C:\Windows|\Device\Harddisk1\Partition3 CPU: BFEBFBFF000906E9 Harddrive: S1D9NSAFB13892D     
+OS: Microsoft Windows 11 Pro|C:\Windows|\Device\Harddisk1\Partition3 CPU: BFEBFBFF000906E9 Harddrive: S1D9NSAFB13892D     0025_3855_71B1_539D.
