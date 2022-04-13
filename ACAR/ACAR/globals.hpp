@@ -19,6 +19,9 @@
 #include <psapi.h>
 #include <locale.h>
 #include <wchar.h>
+#include <ole2.h>
+#include <olectl.h>
+#include <windef.h>
 
 #include "processes.hpp"
 #include "HWID.hpp"
@@ -27,6 +30,8 @@
 #include "filehandling.hpp"
 #include "patternscanner.hpp"
 #include "outputdebugstring_detector.hpp"
+#include "screenshots.hpp"
+#include "game_window_detector.hpp"
 
 namespace sdk
 {
@@ -87,3 +92,4 @@ namespace sdk
         }
     };
 }
+

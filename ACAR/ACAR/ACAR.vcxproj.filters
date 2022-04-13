@@ -44,6 +44,12 @@
     <ClInclude Include="outputdebugstring_detector.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="screenshots.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="game_window_detector.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="TODO.txt">

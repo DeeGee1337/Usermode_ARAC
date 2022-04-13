@@ -41,7 +41,7 @@ int main()
     }
 
     //processlist
-    std::wstring input = print_processes(L"elo");
+    std::wstring input = print_processes(L"cheat");
 
     write_file(sdk::wstring_to_string(OS.ResultList.at(0)), sdk::wstring_to_string(CPU.ResultList.at(0)), hardrives);
 
@@ -85,6 +85,16 @@ int main()
             kill_process_by_ID(std::get<1>(item));
         }
     }
+
+    //Can be removed just testing...
+    Sleep(3000);
+
+    margins window = find_game_window_and_resolution(L"csgo.exe");
+
+    if (window.get_bottom_height() != 0)
+        screen_capture_part(window, "test.bmp");
+    else
+        std::cout << "[GAME WINDOW] NOT OPEN!" << std::endl;
    
     //Test for attaching CE
     debug_string_detection();

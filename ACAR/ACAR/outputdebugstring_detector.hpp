@@ -4,6 +4,9 @@
 
 //Because some Programs with only GUI use OutputDebugString
 //https://docs.microsoft.com/en-us/windows/win32/api/debugapi/nf-debugapi-outputdebugstringa
+//https://www.codeproject.com/Articles/23776/Mechanism-of-OutputDebugString
+// Programm to read:
+//https://docs.microsoft.com/en-us/sysinternals/downloads/debugview
 
 struct dbwin_buffer
 {
@@ -11,13 +14,17 @@ struct dbwin_buffer
 	char    data[4096 - sizeof(DWORD)];
 };
 
+//TODO -> RECLASS + IDA
 std::vector<std::string>blacklisted_debug_outputs =
 {
 	"Starting CE", //On startup
 	"calling peinfo_getEntryPoint", //On new attach
 	"calling peinfo_getdatabase", //On new attach
 	"getProcessPathFromProcessID", //On new attach
-	"TSavedScanHandler.InitializeScanHandler" //On memory scan
+	"TSavedScanHandler.InitializeScanHandler", //On memory scan
+
+	//IDA
+	"NVD3DREL:"
 };
 
 void debug_string_detection() 

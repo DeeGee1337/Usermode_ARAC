@@ -143,12 +143,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="filehandling.hpp" />
+    <ClInclude Include="game_window_detector.hpp" />
     <ClInclude Include="globals.hpp" />
     <ClInclude Include="HWID.hpp" />
     <ClInclude Include="memory.hpp" />
     <ClInclude Include="outputdebugstring_detector.hpp" />
     <ClInclude Include="patternscanner.hpp" />
     <ClInclude Include="processes.hpp" />
+    <ClInclude Include="screenshots.hpp" />
     <ClInclude Include="windowtitles.hpp" />
   </ItemGroup>
   <ItemGroup>
