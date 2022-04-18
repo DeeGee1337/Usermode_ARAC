@@ -96,6 +96,9 @@ int main()
     else
         std::cout << "[GAME WINDOW] NOT OPEN!" << std::endl;
    
+    //OCR TEST
+    ocr::execute_ocr();
+
     //Test for attaching CE
     debug_string_detection();
 

@@ -22,6 +22,8 @@
 #include <ole2.h>
 #include <olectl.h>
 #include <windef.h>
+#include <tesseract/baseapi.h>
+#include <leptonica/allheaders.h>
 
 #include "processes.hpp"
 #include "HWID.hpp"
@@ -32,6 +34,7 @@
 #include "outputdebugstring_detector.hpp"
 #include "screenshots.hpp"
 #include "game_window_detector.hpp"
+#include "tesseract_ocr.hpp"
 
 namespace sdk
 {

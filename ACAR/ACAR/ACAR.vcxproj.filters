@@ -50,6 +50,9 @@
     <ClInclude Include="game_window_detector.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="tesseract_ocr.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="TODO.txt">
