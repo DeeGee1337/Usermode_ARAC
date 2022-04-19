@@ -15,14 +15,14 @@ namespace ocr
         tesseract::TessBaseAPI myOCR;
 
         // Initialize tesseract-ocr with English, without specifying tessdata path
-        if (myOCR.Init("C:\\Users\\Fabian\\Documents\\GitHub\\Usermode_ARAC\\ACAR\\ACAR\\tesseract\\tessdata", "eng"))
+        if (myOCR.Init("F:\\ProjectsVS\\Vcpkg\\tessdata", "eng"))
         {
             fprintf(stderr, "Could not initialize tesseract.\n");
             //exit(1);
         }
 
         // Open input image with leptonica library
-        Pix* image = pixRead("C:\\Users\\Fabian\\Documents\\GitHub\\Usermode_ARAC\\ACAR\\ACAR\\tesseract\\Cheat_Examples\\menu.png");
+        Pix* image = pixRead("F:\\ProjectsVS\\Usermode_ARAC\\ACAR\\ACAR\\tesseract\\Cheat_Examples\\menu.png");
         myOCR.SetImage(image);
         // Get OCR result
         outText = myOCR.GetUTF8Text();
