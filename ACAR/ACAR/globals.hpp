@@ -24,6 +24,7 @@
 #include <windef.h>
 #include <tesseract/baseapi.h>
 #include <leptonica/allheaders.h>
+#include <thread>
 
 #include "processes.hpp"
 #include "HWID.hpp"
@@ -41,11 +42,12 @@ namespace sdk
     enum class flags
     {
         NONE        = 0,
-        Windowname  = 1,
-        HWID        = 2,
-        Memory      = 3,
-        Module      = 4,
-        RDATA       = 5
+        Process     = 1,
+        Windowname  = 2,
+        HWID        = 3,
+        Memory      = 4,
+        Module      = 5,
+        RDATA       = 6
     };
 
     std::string wstring_to_string(std::wstring input)
@@ -61,7 +63,7 @@ namespace sdk
     private:
         std::wstring name;
         int processid;
-        sdk::flags inputflag;
+        sdk::flags inputflag = sdk::flags::NONE;
 
     public:
         process(std::wstring inputname, sdk::flags input)
@@ -85,8 +87,15 @@ namespace sdk
 
         void set_flag(sdk::flags input)
         {
-            std::wcout << "[Memory] Flag changed from: " << (int)this->inputflag << " to " << (int)input << std::endl;
-            this->inputflag = input;
+            if (input > this->inputflag)
+            {
+                std::wcout << "[Memory] Flag changed from: " << (int)this->inputflag << " to " << (int)input << std::endl;
+                this->inputflag = input;
+            }
+            else
+            {
+                std::wcout << "[Memory] Flag is higher" << std::endl;
+            }
         }
 
         std::wstring get_processname()
