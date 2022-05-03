@@ -3,11 +3,16 @@
 //globals for threads
 bool t1running = true;
 bool t2running = true;
+bool t3running = true;
 
 std::vector<sdk::process> processes_hits;
 
 //thread1
 std::wstring input;
+
+//thread3
+bool kill_game = false;
+std::wstring game = L"csgo.exe";
 
 
 void Process_loop() 
@@ -28,22 +33,45 @@ void Process_loop()
             if (input.at(0) != '0')
             {
                 std::cout << "[THREAD1] Process found!" << std::endl;
-                sdk::process object(input, sdk::flags::Process);
+                sdk::process object(input);
                 processes_hits.push_back(object);
             }
         }
 
-        Sleep(10000);
+        Sleep(200);
+        system("CLS");
     }
 }
 
 void Get_open_window_titles_loop()
 {
+    Sleep(10000);
+
     while (t1running == true)
     {
         get_open_window_titles();
 
         Sleep(10000);
+    }
+}
+
+void Is_protected_game_open_and_killable()
+{
+    while (t3running == true)
+    {
+        auto processid = find_processId(game);
+
+        if (processid)
+        {
+            std::cout << "[THREAD3] Protected game ID found!" << std::endl;
+
+            if (kill_game == true)
+            {
+                kill_process_by_ID(processid);
+            }
+        }
+
+        Sleep(5000);
     }
 }
 
@@ -80,23 +108,37 @@ int main()
     WmiQueryResult HDD_SSD = queryAndPrintResult(L"SELECT SerialNumber FROM Win32_PhysicalMedia", L"SerialNumber");
 
     std::string hardrives;
+    std::vector<std::string> hard_drives;
 
     for (const auto& item : HDD_SSD.ResultList)
     {
         std::wcout << item << std::endl;
-        hardrives = hardrives.append(sdk::wstring_to_string(item));
+        hardrives = hardrives.append(sdk::wstring_to_string(item) + " ");
+        hard_drives.push_back(sdk::wstring_to_string(item));
+    }
+
+    //HWID CHECK HOST
+    //Create host object
+    sdk::host host_object(create_host_hwid_string(sdk::wstring_to_string(OS.ResultList.at(0)), sdk::wstring_to_string(CPU.ResultList.at(0)), hardrives));
+    //open file check for cpu and harddrive IDs
+    //if true then terminate and close anything and check other hardwareids if not listed append to blacklist
+    //else start threads/looping and add his or her IDs only if a detection happened
+    
+    if (open_file(sdk::wstring_to_string(CPU.ResultList.at(0)), hard_drives) == -2)
+    {
+        std::cout << "[MAIN] Terminating game..." << std::endl;
+        //terminate game
+        return 0;
     }
 
     //threads
     std::thread t1(Process_loop);
     std::thread t2(Get_open_window_titles_loop);
+    std::thread t3(Is_protected_game_open_and_killable);
 
     t1.join();
     t2.join();
-
-
-    write_file(sdk::wstring_to_string(OS.ResultList.at(0)), sdk::wstring_to_string(CPU.ResultList.at(0)), hardrives);
-
+    t3.join();
 
     //Hackerconsole
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -134,18 +176,21 @@ int main()
     ////Can be removed just testing...
     //Sleep(3000);
 
-    //margins window = find_game_window_and_resolution(L"csgo.exe");
+    margins window = find_game_window_and_resolution(L"csgo.exe");
 
-    //if (window.get_bottom_height() != 0)
-    //    screen_capture_part(window, "test.bmp");
-    //else
-    //    std::cout << "[GAME WINDOW] NOT OPEN!" << std::endl;
+    if (window.get_bottom_height() != 0)
+        screen_capture_part(window, "test.bmp");
+    else
+        std::cout << "[GAME WINDOW] NOT OPEN!" << std::endl;
    
-    ////OCR TEST
-    //ocr::execute_ocr();
+    //OCR TEST
+    ocr::execute_ocr();
 
-    ////Test for attaching CE
-    //debug_string_detection();
+    //Test for attaching CE
+    debug_string_detection();
+
+   /* if flag > 2 then write HWID to blacklist ENDSTEP
+    write_file(create_flagged_hwid_string(sdk::wstring_to_string(CPU.ResultList.at(0)), hardrives));*/
 
     system("pause");
     

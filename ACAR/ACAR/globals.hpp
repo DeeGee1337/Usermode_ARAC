@@ -26,6 +26,7 @@
 #include <leptonica/allheaders.h>
 #include <thread>
 
+
 #include "processes.hpp"
 #include "HWID.hpp"
 #include "memory.hpp"
@@ -56,46 +57,58 @@ namespace sdk
         return str;
     }
 
-    std::vector<std::tuple<std::wstring, int, sdk::flags>> processes_tuple;
+    std::vector<std::tuple<std::wstring, int>> processes_tuple;
+
+    class host
+    {
+    private:
+        std::string hwid;
+        sdk::flags status = sdk::flags::NONE;
+    
+    public:
+        host(std::string input)
+        {
+            this->hwid = input;
+            std::cout << "[HOST] HWID added to class: " << this->hwid << std::endl;
+        }
+
+        sdk::flags get_flag()
+        {
+            return this->status;
+        }
+
+        void set_flag(sdk::flags input)
+        {
+            if (input > this->status)
+            {
+                std::wcout << "[HOST] Flag changed from: " << (int)this->status << " to " << (int)input << std::endl;
+                this->status = input;
+            }
+            else
+            {
+                std::wcout << "[HOST] Flag is already higher" << std::endl;
+            }
+        }
+    };
     
     class process
     {
     private:
         std::wstring name;
         int processid;
-        sdk::flags inputflag = sdk::flags::NONE;
 
     public:
-        process(std::wstring inputname, sdk::flags input)
+        process(std::wstring inputname)
         {
             this->name = inputname;
             this->processid = find_processId(inputname);
-            this->inputflag = input;
 
-            processes_tuple.push_back(std::make_tuple(inputname, processid, inputflag));
+            processes_tuple.push_back(std::make_tuple(inputname, processid));
         };
 
         int get_id()
         {
             return this->processid;
-        }
-
-        sdk::flags get_flag()
-        {
-            return this->inputflag;
-        }
-
-        void set_flag(sdk::flags input)
-        {
-            if (input > this->inputflag)
-            {
-                std::wcout << "[Memory] Flag changed from: " << (int)this->inputflag << " to " << (int)input << std::endl;
-                this->inputflag = input;
-            }
-            else
-            {
-                std::wcout << "[Memory] Flag is higher" << std::endl;
-            }
         }
 
         std::wstring get_processname()
