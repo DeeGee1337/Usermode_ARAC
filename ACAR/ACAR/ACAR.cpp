@@ -39,7 +39,7 @@ void Process_loop()
         }
 
         Sleep(200);
-        system("CLS");
+        //system("CLS");
     }
 }
 

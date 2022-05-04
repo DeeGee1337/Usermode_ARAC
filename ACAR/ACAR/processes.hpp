@@ -58,27 +58,27 @@ std::wstring print_processes(std::wstring searchinput)
             }
         }
 
-        //// Retrieve the priority class.
-        //dwPriorityClass = 0;
-        //hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pe32.th32ProcessID);
+        // Retrieve the priority class.
+        dwPriorityClass = 0;
+        hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pe32.th32ProcessID);
 
-        //if (hProcess == NULL)
-        //    std::cout << "OpenProcess" << std::endl;
-        //else
-        //{
-        //    dwPriorityClass = GetPriorityClass(hProcess);
-        //    if (!dwPriorityClass)
-        //        std::cout << "GetPriorityClass" << std::endl;
-        //    CloseHandle(hProcess);
-        //}
+        if (hProcess == NULL)
+            std::cout << "OpenProcess" << std::endl;
+        else
+        {
+            dwPriorityClass = GetPriorityClass(hProcess);
+            if (!dwPriorityClass)
+                std::cout << "GetPriorityClass" << std::endl;
+            CloseHandle(hProcess);
+        }
 
-       /* printf("\n  Process ID        = 0x%08X", pe32.th32ProcessID);
+        printf("\n  Process ID        = 0x%08X", pe32.th32ProcessID);
         printf("\n  Thread count      = %d", pe32.cntThreads);
         printf("\n  Parent process ID = 0x%08X", pe32.th32ParentProcessID);
-        printf("\n  Priority base     = %d", pe32.pcPriClassBase);*/
+        printf("\n  Priority base     = %d", pe32.pcPriClassBase);
 
-       /* if (dwPriorityClass)
-            printf("\n  Priority class    = %d", dwPriorityClass);*/
+        if (dwPriorityClass)
+            printf("\n  Priority class    = %d", dwPriorityClass);
 
         //TODO
         //List the modules and threads associated with this process
