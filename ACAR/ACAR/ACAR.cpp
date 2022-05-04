@@ -118,12 +118,12 @@ int main()
     }
 
     //HWID CHECK HOST
-    //Create host object
-    sdk::host host_object(create_host_hwid_string(sdk::wstring_to_string(OS.ResultList.at(0)), sdk::wstring_to_string(CPU.ResultList.at(0)), hardrives));
     //open file check for cpu and harddrive IDs
     //if true then terminate and close anything and check other hardwareids if not listed append to blacklist
     //else start threads/looping and add his or her IDs only if a detection happened
     
+    sdk::host host_object(create_host_hwid_string(sdk::wstring_to_string(OS.ResultList.at(0)), sdk::wstring_to_string(CPU.ResultList.at(0)), hardrives));
+
     if (open_file(sdk::wstring_to_string(CPU.ResultList.at(0)), hard_drives) == -2)
     {
         std::cout << "[MAIN] Terminating game..." << std::endl;
@@ -132,49 +132,44 @@ int main()
     }
 
     //threads
-    std::thread t1(Process_loop);
+    /*std::thread t1(Process_loop);
     std::thread t2(Get_open_window_titles_loop);
     std::thread t3(Is_protected_game_open_and_killable);
 
     t1.join();
     t2.join();
-    t3.join();
+    t3.join();*/
 
     //Hackerconsole
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(hConsole, 10); //10 is green
 
-    //std::cout << "[MEMORY] Searching for strings in processmemory:" << std::endl;
-    //auto num_of_strings = 4; //Example
-    //auto memresults = 0;
-    //auto moduleresults = 0;
-    //const char* strings[] = { "Cheat Engine", "ReClass" , "Hex-Rays", "Aimbot"};
+    //
+    sdk::process object(L"Cheat Engine");
 
-    //for (size_t i = 0; i < num_of_strings; i++)
-    //{
-    //    std::cout << "[MEMORY] Searching for \"" << strings[i] << "\"" << std::endl;
-    //    memresults = memory::search_for_string(object.get_id(), strings[i], strlen(strings[i]));
-    //    std::cout << "[MEMORY] Found " << std::dec << memresults << " references." << std::endl << std::endl;
-    //}
+    std::cout << "[MEMORY] Searching for strings in processmemory:" << std::endl;
+    auto memresults = 0;
+    auto moduleresults = 0;
 
-    //std::cout << "[MEMORY] Searching loaded DLL's" << std::endl;
-    //moduleresults = memory::detect_modules(object.get_id());
-    //std::cout << "[MEMORY] Found " << std::dec << moduleresults << " references." << std::endl << std::endl;
+    for (auto itt : search_file())
+    {
+        std::cout << "[MEMORY] Searching for \"" << itt << "\"" << std::endl;
+        memresults = memory::search_for_string(object.get_id(), itt.data(), itt.length()); 
+        std::cout << "[MEMORY] Found " << std::dec << memresults << " references." << std::endl << std::endl;
+    }
 
-    //if ((memresults || moduleresults) != 0)
-    //    object.set_flag(sdk::flags::Memory);
+    if (memresults)
+        host_object.set_flag(sdk::flags::Memory);
 
-    //for (auto item : sdk::processes_tuple)
-    //{
-    //    if (object.get_flag() == sdk::flags::Memory)
-    //    {
-    //        std::cout << "[BAN] Found Memorydetection" << std::endl;
-    //        kill_process_by_ID(std::get<1>(item));
-    //    }
-    //}
+    std::cout << "[MEMORY] Searching loaded DLL's" << std::endl;
+    moduleresults = memory::detect_modules(object.get_id());
+    std::cout << "[MEMORY] Found " << std::dec << moduleresults << " references." << std::endl << std::endl;
+    
+    if (moduleresults)
+        host_object.set_flag(sdk::flags::Module);
 
     ////Can be removed just testing...
-    //Sleep(3000);
+    Sleep(3000);
 
     margins window = find_game_window_and_resolution(L"csgo.exe");
 
@@ -189,8 +184,17 @@ int main()
     //Test for attaching CE
     debug_string_detection();
 
-   /* if flag > 2 then write HWID to blacklist ENDSTEP
-    write_file(create_flagged_hwid_string(sdk::wstring_to_string(CPU.ResultList.at(0)), hardrives));*/
+    //if flag > 2 then write HWID to blacklist ENDSTEP
+    for (auto item : sdk::processes_tuple)
+    {
+        if ((int)host_object.get_flag() > 2)
+        {
+            write_file(create_flagged_hwid_string(sdk::wstring_to_string(CPU.ResultList.at(0)), hardrives));
+            std::cout << "[MAIN] Added Hardware to Blacklist" << std::endl;
+            std::cout << "[BAN] Found Memorydetection" << std::endl;
+            kill_process_by_ID(std::get<1>(item));
+        }
+    }
 
     system("pause");
     

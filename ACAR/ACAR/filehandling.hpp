@@ -2,9 +2,28 @@
 
 #include "globals.hpp"
 #define TEXTFILE "BlackList.txt"
+#define SEARCHFILE "SearchList.txt"
 
-int write_file(std::string, std::string);
-
+const std::vector<std::string> search_file() {
+	std::fstream file;
+	std::string str;
+	std::string content;
+	std::vector<std::string> searchlist;
+	file.open(SEARCHFILE);
+	if (!file.is_open())
+	{
+		std::cerr << "[FILE] Failed to open " << SEARCHFILE << std::endl;
+		return searchlist;
+	}
+	else
+	{
+		while (std::getline(file, str))
+		{
+			searchlist.push_back(str);
+		}
+		return searchlist;
+	}
+}
 
 int open_file(std::string cpu_id, std::vector<std::string> hard_drives) {
 	std::fstream file;
@@ -22,7 +41,6 @@ int open_file(std::string cpu_id, std::vector<std::string> hard_drives) {
 	{
 		while (std::getline(file, str))
 		{
-			counter++;
 			content += str;
 			std::size_t found = content.find(cpu_id);
 
@@ -37,6 +55,7 @@ int open_file(std::string cpu_id, std::vector<std::string> hard_drives) {
 				for (const auto itt : hard_drives) {
 					std::size_t found_hd = str.find(itt);
 					if (found_hd != std::string::npos) {
+						std::cout << "[FILE] Found string at Startposition: " << found_hd << std::endl;
 						std::cout << "[FILE] HWID already blacklisted" << std::endl;
 						file.close();
 						std::cout << "[FILE] Printing CPU from Blacklist: " << content << std::endl;
