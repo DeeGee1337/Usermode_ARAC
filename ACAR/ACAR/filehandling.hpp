@@ -3,6 +3,7 @@
 #include "globals.hpp"
 #define TEXTFILE "BlackList.txt"
 #define SEARCHFILE "SearchList.txt"
+#define BLACKLIST "WindowTitle.txt"
 
 const std::vector<std::string> search_file() {
 	std::fstream file;
@@ -23,6 +24,28 @@ const std::vector<std::string> search_file() {
 		}
 		return searchlist;
 	}
+}
+
+const std::vector<std::string> get_blacklisted_windows() {
+	std::fstream file;
+	std::string str;
+	std::string content;
+	std::vector<std::string> windowlist;
+	file.open(BLACKLIST);
+	if (!file.is_open())
+	{
+		std::cerr << "[FILE Failed to open " << BLACKLIST << std::endl;
+		return windowlist;
+	}
+	else
+	{
+		while (std::getline(file, str))
+		{
+			windowlist.push_back(str);
+		}
+		return windowlist;
+	}
+
 }
 
 int open_file(std::string cpu_id, std::vector<std::string> hard_drives) {

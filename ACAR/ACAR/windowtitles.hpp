@@ -1,6 +1,7 @@
 #pragma once
 
 #include "globals.hpp"
+#include "filehandling.hpp"
 
 BOOL CALLBACK safe_window_topmost(HWND hwnd, LPARAM lParam) 
 {
@@ -56,24 +57,22 @@ BOOL CALLBACK safe_window(HWND hwnd, LPARAM lParam)
 
 void get_open_window_titles()
 {
-    std::vector<std::wstring> windows_blacklist;
-    windows_blacklist.push_back(L"AeroOverlay dx");
-
-
+    std::vector<std::string> windows_blacklist = get_blacklisted_windows();
+  
     std::wcout << "[WINDOW] Grabbing all open titles" << std::endl;
-    std::vector<std::wstring> titles;
+    std::vector<std::string> titles;
     EnumWindows(safe_window, reinterpret_cast<LPARAM>(&titles));
     // At this point, titles if fully populated and could be displayed, e.g.:
     printf("\n");
     for (const auto& title : titles)
     {
-        std::wcout << "[WINDOW] " << L"Title: " << title << std::endl;
+        std::cout << "[WINDOW] " << L"Title: " << title << std::endl;
 
         for (auto itt2 : windows_blacklist)
         {
             if (itt2 == title)
             {
-                std::wcout << "[WINDOW DETECTION] " << L"Title: " << title  << " FLAG DETECTED!" << std::endl;
+                std::cout << "[WINDOW DETECTION] " << L"Title: " << title  << " FLAG DETECTED!" << std::endl;
                 break;
             }
         }
@@ -82,7 +81,7 @@ void get_open_window_titles()
     printf("\n");
 
     std::wcout << "[WINDOW] Grabbing topmost and aero overlays" << std::endl;
-    std::vector<std::wstring> topmosttitles;
+    std::vector<std::string> topmosttitles;
     EnumWindows(safe_window_topmost, reinterpret_cast<LPARAM>(&topmosttitles));
 
     printf("\n");
@@ -90,13 +89,13 @@ void get_open_window_titles()
     {
         if (!title.empty())
         {
-            std::wcout << "[WINDOW TOPMOST/AERO] " << L"Title: " << title << std::endl;
+            std::cout << "[WINDOW TOPMOST/AERO] " << "Title: " << title << std::endl;
 
             for (auto itt2 : windows_blacklist)
             {
                 if (itt2 == title)
                 {
-                    std::wcout << "[WINDOW DETECTION] " << L"Title: " << title << " FLAG DETECTED!" << std::endl;
+                    std::cout << "[WINDOW DETECTION] " << "Title: " << title << " FLAG DETECTED!" << std::endl;
                     break;
                 }
             }
