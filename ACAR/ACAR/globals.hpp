@@ -25,6 +25,7 @@
 #include <tesseract/baseapi.h>
 #include <leptonica/allheaders.h>
 #include <thread>
+#include <cctype>
 
 
 #include "processes.hpp"
@@ -45,10 +46,10 @@ namespace sdk
         NONE        = 0,
         Process     = 1,
         Windowname  = 2,
-        HWID        = 3,
-        Memory      = 4,
-        Module      = 5,
-        RDATA       = 6
+        OCR         = 3,
+        HWID        = 4,
+        Memory      = 5,
+        Module      = 6
     };
 
     std::string wstring_to_string(std::wstring input)

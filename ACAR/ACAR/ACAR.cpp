@@ -179,7 +179,10 @@ int main()
         std::cout << "[GAME WINDOW] NOT OPEN!" << std::endl;
    
     //OCR TEST
-    ocr::execute_ocr();
+    if (!ocr::execute_ocr())
+        host_object.set_flag(sdk::flags::OCR);
+
+    std::cout << "[MAIN OCR] hostflag: " << (int)host_object.get_flag() << std::endl;
 
     //Test for attaching CE
     debug_string_detection();
@@ -187,7 +190,7 @@ int main()
     //if flag > 2 then write HWID to blacklist ENDSTEP
     for (auto item : sdk::processes_tuple)
     {
-        if ((int)host_object.get_flag() > 2)
+        if ((int)host_object.get_flag() > 3)
         {
             write_file(create_flagged_hwid_string(sdk::wstring_to_string(CPU.ResultList.at(0)), hardrives));
             std::cout << "[MAIN] Added Hardware to Blacklist" << std::endl;

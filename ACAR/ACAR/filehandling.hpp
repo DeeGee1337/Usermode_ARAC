@@ -1,9 +1,42 @@
 #pragma once
 
 #include "globals.hpp"
-#define TEXTFILE "BlackList.txt"
+#define BLACKLIST "BlackList.txt"
 #define SEARCHFILE "SearchList.txt"
-#define BLACKLIST "WindowTitle.txt"
+#define WINDOWTITLE "WindowTitle.txt"
+#define OCRLIST "OCRList.txt"
+
+bool check_OCRList(std::vector<char> ocrcontent) {
+	std::fstream file;
+	std::string str;
+	std::string content;
+	std::string ocr(ocrcontent.begin(), ocrcontent.end());
+	file.open(OCRLIST);
+	if (!file.is_open())
+	{
+		std::cerr << "[FILE] Failed to open " << OCRLIST << std::endl;
+		return 1;
+	}
+	else
+	{
+		while (std::getline(file, str))
+		{
+			content += str;
+			std::size_t found = content.find(ocr);
+			
+			std::cout << "[OCRFILECHECK] Within the while " << std::endl;
+			std::cout << "[OCRFILECHECK] Printing content: " << content <<std::endl;
+			std::cout << "[OCRFILECHECK] Printing ocr: \n" << ocr << std::endl;
+			if (found != std::string::npos) 
+			{
+				std::cout << "[FILE] OCR match found: " << found << std::endl;
+				file.close();
+				return 0;
+			}
+		}
+	}
+	return 1;
+}
 
 const std::vector<std::string> search_file() {
 	std::fstream file;
@@ -31,10 +64,10 @@ const std::vector<std::string> get_blacklisted_windows() {
 	std::string str;
 	std::string content;
 	std::vector<std::string> windowlist;
-	file.open(BLACKLIST);
+	file.open(WINDOWTITLE);
 	if (!file.is_open())
 	{
-		std::cerr << "[FILE Failed to open " << BLACKLIST << std::endl;
+		std::cerr << "[FILE Failed to open " << WINDOWTITLE << std::endl;
 		return windowlist;
 	}
 	else
@@ -54,10 +87,10 @@ int open_file(std::string cpu_id, std::vector<std::string> hard_drives) {
 	std::string str;
 	int counter = 0;
 
-	file.open(TEXTFILE);
+	file.open(BLACKLIST);
 	if (!file.is_open()) 
 	{
-		std::cerr << "[FILE] Failed to open " << TEXTFILE << std::endl;
+		std::cerr << "[FILE] Failed to open " << BLACKLIST << std::endl;
 		return -1;
 	}
 	else
@@ -99,10 +132,10 @@ int write_file(std::string hwid) {
 	std::fstream file;
 	std::string hwid_ = hwid;
 	
-	file.open(TEXTFILE, std::ios_base::app);	//append modus mit std::ios_base::app
+	file.open(BLACKLIST, std::ios_base::app);	//append modus mit std::ios_base::app
 	if (!file.is_open())
 	{
-		std::cerr << "[FILE] Couldn´t write to Blacklist " << TEXTFILE << std::endl;
+		std::cerr << "[FILE] Couldn´t write to Blacklist " << BLACKLIST << std::endl;
 		return -1;
 	}
 	else

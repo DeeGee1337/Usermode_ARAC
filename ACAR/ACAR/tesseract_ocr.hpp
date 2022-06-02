@@ -1,6 +1,7 @@
 #pragma once
 #include "globals.hpp"
 
+
 //https://tesseract-ocr.github.io/
 
 namespace ocr
@@ -31,6 +32,17 @@ namespace ocr
         printf("[OCR] Output:\n%s", outText);
         std::cout << "----------------------------------" << std::endl;
 
+        //Check OCRList
+        std::vector<char> content;
+        while (*(outText) != '\0')
+        {
+            content.push_back(*(outText++));
+        }
+
+        /*std::cout << "[OCR] Printing content: \n";
+        for (auto itt : content)
+            std::cout << itt;*/
+
         // Destroy used object and release memory
         //api->End();
         myOCR.End();
@@ -40,6 +52,9 @@ namespace ocr
         myOCR.Clear();
 
         pixDestroy(&image);
+
+        if(!check_OCRList(content))
+            return false;
 
         return true;
     }
