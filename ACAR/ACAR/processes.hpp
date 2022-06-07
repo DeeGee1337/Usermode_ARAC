@@ -41,14 +41,14 @@ std::wstring print_processes(std::wstring searchinput)
         if (pe32.szExeFile)
         {
             std::wstring current = pe32.szExeFile;
-            
+
             if (current.find(searchinput) != std::string::npos)
             {
                 std::wcout << "[PRCOESS] Substring found in Proccesslist: " << current << " | Input: " << searchinput << std::endl;
                 return current;
             }
 
-            std::transform(current.begin(), current.end(), current.begin(),[](unsigned char c) { return std::tolower(c); }); //lmao hacky
+            std::transform(current.begin(), current.end(), current.begin(), [](unsigned char c) { return std::tolower(c); }); //lmao hacky
             std::wcout << "[PRCOESS] std::transform: " << current << std::endl;
 
             if (current.find(searchinput) != std::string::npos)
@@ -132,14 +132,14 @@ void kill_process_by_name(const std::wstring& processName)
 
     std::wcout << "[PRCOESS] kill_process_by_name: " << processName << std::endl;
 
-    if (dwProcessId == 0) 
+    if (dwProcessId == 0)
     {
         printf("[PRCOESS] failed to get process id for %s\n", processName);
     }
 
     hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, dwProcessId);
 
-    if (hProcess != NULL) 
+    if (hProcess != NULL)
     {
         printf("[PRCOESS] going to terminate process: %ld\n", dwProcessId);
         fResult = TerminateProcess(hProcess, 0);

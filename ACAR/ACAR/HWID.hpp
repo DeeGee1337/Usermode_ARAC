@@ -182,25 +182,25 @@ WmiQueryResult getWmiQueryResult(std::wstring wmiQuery, std::wstring propNameOfR
 
                                 // Get the value of desired property
                                 hr = pclsObj->Get(propNameOfResultObject.c_str(), 0, &vtProp, 0, 0);
-                                if (S_OK != hr) 
+                                if (S_OK != hr)
                                 {
                                     retVal.Error = WmiQueryError::PropertyExtractionFailure;
                                     retVal.ErrorDescription = L"Couldn't extract property: " + propNameOfResultObject + L" from result of query. Error code : " + std::to_wstring(hr);
                                 }
-                                else 
+                                else
                                 {
                                     BSTR val = vtProp.bstrVal;
 
                                     // Sometimes val might be NULL even when result is S_OK
                                     // Convert NULL to empty string (otherwise "std::wstring(val)" would throw exception)
-                                    if (NULL == val) 
+                                    if (NULL == val)
                                     {
-                                        if (allowEmptyItems) 
+                                        if (allowEmptyItems)
                                         {
                                             retVal.ResultList.push_back(std::wstring(L""));
                                         }
                                     }
-                                    else 
+                                    else
                                     {
                                         retVal.ResultList.push_back(std::wstring(val));
                                     }
@@ -239,7 +239,7 @@ WmiQueryResult queryAndPrintResult(std::wstring query, std::wstring propNameOfRe
     WmiQueryResult res;
     res = getWmiQueryResult(query, propNameOfResultObject);
 
-    if (res.Error != WmiQueryError::None) 
+    if (res.Error != WmiQueryError::None)
     {
         std::wcout << "Got this error while executing query: " << std::endl;
         std::wcout << res.ErrorDescription << std::endl;
@@ -262,7 +262,7 @@ typedef LONG NTSTATUS, * PNTSTATUS;
 
 typedef NTSTATUS(WINAPI* RtlGetVersionPtr)(PRTL_OSVERSIONINFOW);
 
-DWORD GetRealOSVersion(DWORD &minorver) {
+DWORD GetRealOSVersion(DWORD& minorver) {
     HMODULE hMod = ::GetModuleHandleW(L"ntdll.dll");
     if (hMod) {
         RtlGetVersionPtr fxPtr = (RtlGetVersionPtr)::GetProcAddress(hMod, "RtlGetVersion");

@@ -65,7 +65,7 @@ bool save_bitmap(LPCSTR filename, HBITMAP bmp, HPALETTE pal)
     return result;
 }
 
-bool screen_capture_part(margins inputwindow, LPCSTR fname) 
+bool screen_capture_part(margins inputwindow, LPCSTR fname)
 {
     HDC hdcSource = GetDC(NULL);
     HDC hdcMemory = CreateCompatibleDC(hdcSource);

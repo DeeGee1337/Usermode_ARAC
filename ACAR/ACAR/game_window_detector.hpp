@@ -125,20 +125,20 @@ public:
 margins find_game_window_and_resolution(std::wstring process)
 {
     margins gamewindow;
-	std::wcout << "[GAME DECTECTOR] Looking for process: " << process << std::endl;
-	auto process_id = find_processId(process);
-	std::cout << "[GAME DECTECTOR] Processwindow found: " << process_id << std::endl;
+    std::wcout << "[GAME DECTECTOR] Looking for process: " << process << std::endl;
+    auto process_id = find_processId(process);
+    std::cout << "[GAME DECTECTOR] Processwindow found: " << process_id << std::endl;
 
-	auto process_handle = OpenProcess(PROCESS_ALL_ACCESS, FALSE, process_id);
-	if (process_handle == nullptr)
-	{
-		std::cout << "[GAME DECTECTOR] Processhandle not found! " << std::endl;
-		return gamewindow;
-	}
+    auto process_handle = OpenProcess(PROCESS_ALL_ACCESS, FALSE, process_id);
+    if (process_handle == nullptr)
+    {
+        std::cout << "[GAME DECTECTOR] Processhandle not found! " << std::endl;
+        return gamewindow;
+    }
 
-	auto window = FindWindowA("Valve001", "Counter-Strike: Global Offensive - Direct3D 9");
-	if (window)
-	{
+    auto window = FindWindowA("Valve001", "Counter-Strike: Global Offensive - Direct3D 9");
+    if (window)
+    {
         std::cout << "[GAME DECTECTOR] Gamewindow found!" << std::endl;
         printf("[GAME DECTECTOR] CSGO wnd: 0x%p\n", window);
 
@@ -173,7 +173,7 @@ margins find_game_window_and_resolution(std::wstring process)
 
             return gamewindow;
         }
-	}
+    }
 
-	return gamewindow;
+    return gamewindow;
 }

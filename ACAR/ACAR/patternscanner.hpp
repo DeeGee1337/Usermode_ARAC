@@ -55,7 +55,7 @@ bool CopyProcessSection(HANDLE process_handle, uintptr_t base, char* section_nam
                 section_buf.reserve(section_buf.size() + section_size);
 
                 SIZE_T read_bytes = 0;
-                result = ReadProcessMemory (process_handle, (void*)section_base, section_buf.data() + section_buf.size(), section_size, &read_bytes);
+                result = ReadProcessMemory(process_handle, (void*)section_base, section_buf.data() + section_buf.size(), section_size, &read_bytes);
                 if (!result || read_bytes != section_size)
                 {
                     printf("%s: failed to read section (read_bytes: %X)", read_bytes);

@@ -27,14 +27,14 @@ std::vector<std::string>blacklisted_debug_outputs =
 	"NVD3DREL:"
 };
 
-void debug_string_detection() 
+void debug_string_detection()
 {
 	std::cout << "[OUTPUTDEBUG DETECTOR] Starting..." << std::endl;
 
 	HANDLE hmutex = OpenMutexA(MUTEX_ALL_ACCESS, 0, "DBWinMutex");
 	HANDLE hevent_buffer_ready = OpenEventA(EVENT_ALL_ACCESS, 0, "DBWIN_BUFFER_READY");
 
-	if (hevent_buffer_ready == NULL) 
+	if (hevent_buffer_ready == NULL)
 	{
 		hevent_buffer_ready = CreateEventA(NULL, FALSE, TRUE, "DBWIN_BUFFER_READY");
 		if (!hevent_buffer_ready)
@@ -46,7 +46,7 @@ void debug_string_detection()
 
 	HANDLE hevent_data_ready = OpenEventA(SYNCHRONIZE, 0, "DBWIN_DATA_READY");
 
-	if (hevent_data_ready == NULL) 
+	if (hevent_data_ready == NULL)
 	{
 		hevent_data_ready = CreateEventA(NULL, FALSE, FALSE, "DBWIN_DATA_READY");
 		if (!hevent_data_ready)
@@ -57,8 +57,8 @@ void debug_string_detection()
 	}
 
 	HANDLE file_mapping = OpenFileMappingA(FILE_MAP_READ, FALSE, "DBWIN_BUFFER");
-	
-	if (file_mapping == NULL) 
+
+	if (file_mapping == NULL)
 	{
 		file_mapping = CreateFileMappingA(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, sizeof(dbwin_buffer), "DBWIN_BUFFER");
 		if (!file_mapping)
@@ -78,15 +78,15 @@ void debug_string_detection()
 
 	std::cout << "[OUTPUTDEBUG DETECTOR] While True" << std::endl; // TODO -> Spawn a thread here
 
-	while (true) 
+	while (true)
 	{
 		DWORD ret = WaitForSingleObject(hevent_data_ready, 1);
 
-		if (ret == WAIT_OBJECT_0) 
+		if (ret == WAIT_OBJECT_0)
 		{
-			for (auto blacklisted_debug_output : blacklisted_debug_outputs) 
+			for (auto blacklisted_debug_output : blacklisted_debug_outputs)
 			{
-				if (std::string(buffer->data).find(blacklisted_debug_output) != std::string::npos) 
+				if (std::string(buffer->data).find(blacklisted_debug_output) != std::string::npos)
 				{
 					printf("[OUTPUTDEBUG DETECTOR] Blacklisted output: %s\n", buffer->data);
 				}
