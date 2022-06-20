@@ -54,7 +54,7 @@ BOOL CALLBACK safe_window(HWND hwnd, LPARAM lParam)
     return TRUE;
 }
 
-void get_open_window_titles()
+bool get_open_window_titles()
 {
     std::vector<std::wstring> windows_blacklist;
     windows_blacklist.push_back(L"AeroOverlay dx");
@@ -74,7 +74,7 @@ void get_open_window_titles()
             if (itt2 == title)
             {
                 std::wcout << "[WINDOW DETECTION] " << L"Title: " << title  << " FLAG DETECTED!" << std::endl;
-                break;
+                return true;
             }
         }
     }
@@ -97,7 +97,7 @@ void get_open_window_titles()
                 if (itt2 == title)
                 {
                     std::wcout << "[WINDOW DETECTION] " << L"Title: " << title << " FLAG DETECTED!" << std::endl;
-                    break;
+                    return true;
                 }
             }
         }

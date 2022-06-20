@@ -27,9 +27,15 @@ namespace ocr
         // Get OCR result
         outText = myOCR.GetUTF8Text();
 
-        std::cout << "----------------------------------" << std::endl;
-        printf("[OCR] Output:\n%s", outText);
-        std::cout << "----------------------------------" << std::endl;
+        //std::cout << "----------------------------------" << std::endl;
+        //printf("[OCR] Output:\n%s", outText);
+        //std::cout << "----------------------------------" << std::endl;
+
+        //Check OCRList
+        std::string convert;
+
+        convert.append(outText);
+        std::cout << "[OCR] Printing content: " << convert << std::endl;
 
         // Destroy used object and release memory
         //api->End();
@@ -40,6 +46,9 @@ namespace ocr
         myOCR.Clear();
 
         pixDestroy(&image);
+
+        if (!check_OCRList(convert))
+            return false;
 
         return true;
     }

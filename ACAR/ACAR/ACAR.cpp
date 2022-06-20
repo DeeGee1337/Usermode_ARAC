@@ -1,25 +1,36 @@
 #include "globals.hpp"
 
+
 //globals for threads
 bool t1running = true;
-bool t2running = true;
+bool t2running = false;
+bool t3running = false;
+bool t4running = false;
+bool t5running = false;
+bool t6running = false;
+std::mutex m_lock;
+bool canceloutput = false;
 
 std::vector<sdk::process> processes_hits;
 
 //thread1
 std::wstring input;
 
+//thread3
+bool kill_game = false;
+std::wstring game = L"csgo.exe";
 
-void Process_loop() 
+//Thread 1
+void Process_loop()
 {
     std::vector<std::wstring> processes;
     processes.push_back(L"cheat");
     processes.push_back(L"ida");
     processes.push_back(L"reclass");
 
-    while (t1running == true) 
+    while (t1running == true)
     {
-        //loop the vector
+        //loop the vectorc
         for (auto itt : processes)
         {
             std::wcout << "[THREAD1] Processing: " << itt << std::endl;
@@ -28,24 +39,147 @@ void Process_loop()
             if (input.at(0) != '0')
             {
                 std::cout << "[THREAD1] Process found!" << std::endl;
-                sdk::process object(input, sdk::flags::Process);
+                sdk::process object(input);
                 processes_hits.push_back(object);
             }
         }
-
-        Sleep(10000);
+        m_lock.lock();
+        t1running = false;
+        t2running = true;
+        m_lock.unlock();   
     }
 }
 
-void Get_open_window_titles_loop()
+//Thread 2
+void Is_protected_game_open_and_killable()
 {
-    while (t1running == true)
+    while (t2running == true)
     {
-        get_open_window_titles();
+        auto processid = find_processId(game);
 
-        Sleep(10000);
+        if (processid)
+        {
+            std::cout << "[THREAD2] Protected game ID found!" << std::endl;
+
+            if (kill_game == true)
+            {
+                kill_process_by_ID(processid);
+            }
+        }
+        m_lock.lock();
+        t2running = false;
+        t3running = true;
+        m_lock.unlock();
     }
 }
+
+
+//Thread 3
+void String_Detection(sdk::host& host_object)
+{
+    while (t3running == true)
+    {
+        //EINKOMMENTIEREN
+        //if (debug_string_detection())
+         //   host_object.set_flag(sdk::flags::Driveroutput);
+
+        m_lock.lock();
+        t3running = false;
+        t4running = true;
+        m_lock.unlock();
+    }
+}
+
+
+
+//Thread 4
+void Get_open_window_titles_loop(sdk::host& host_object)
+{
+    while (t4running == true)
+    {
+        if (get_open_window_titles())
+        {
+            host_object.set_flag(sdk::flags::Windowname);
+            canceloutput = true;
+        }
+
+        m_lock.lock();
+        t4running = false;
+        t5running = true;
+        m_lock.unlock();
+    }
+}
+
+
+//THread 5
+void Search_window(sdk::host& host_object)
+{
+    while (t5running == true)
+    {
+        margins window = find_game_window_and_resolution(L"csgo.exe");
+
+        if (window.get_bottom_height() != 0)
+            screen_capture_part(window, "test.bmp");
+        else
+            std::cout << "[GAME WINDOW] NOT OPEN!" << std::endl;
+
+        ///OCR TEST
+        if (!ocr::execute_ocr()) 
+        {
+            host_object.set_flag(sdk::flags::OCR);
+            canceloutput = true;
+        }
+
+        m_lock.lock();
+        t5running = false;
+        t6running = true;
+        m_lock.unlock(); 
+    }
+}
+
+//Thread 6
+void MemMod_Check(sdk::host& host_object) {
+
+    while (t6running == true)
+    {
+        //cheatengine-x86_64.exe
+        //elo.exe
+        //ida64.exe
+        //ReClass.NET.exe
+        sdk::process object(L"ida64.exe");
+
+        std::cout << "[MEMORY] Searching for strings in processmemory:" << std::endl;
+        auto memresults = 0;
+        auto moduleresults = 0;
+
+        for (auto itt : search_file())
+        {
+            std::cout << "[MEMORY] Searching for \"" << itt << "\"" << std::endl;
+            memresults = memory::search_for_string(object.get_id(), itt.data(), itt.length());
+            std::cout << "[MEMORY] Found " << std::dec << memresults << " references." << std::endl << std::endl;
+        }
+
+        if (memresults) {
+            host_object.set_flag(sdk::flags::Memory);
+            canceloutput = true;
+        }
+
+        std::cout << "[MEMORY] Searching loaded DLL's" << std::endl;
+        moduleresults = memory::detect_modules(object.get_id());
+        std::cout << "[MEMORY] Found " << std::dec << moduleresults << " references." << std::endl << std::endl;
+
+        if (moduleresults) {
+            host_object.set_flag(sdk::flags::Module);
+            canceloutput = true;
+        }
+
+        m_lock.lock();
+        t6running = false;
+        t1running = true;
+        m_lock.unlock();   
+    }
+}
+
 
 int main()
 {
@@ -59,14 +193,14 @@ int main()
     // Get OS and partition
     std::cout << "[HWID] OS/PARTITION: " << std::endl;
     WmiQueryResult OS = queryAndPrintResult(L"SELECT * FROM Win32_OperatingSystem", L"Name");
-    
+
     for (const auto& item : OS.ResultList)
         std::wcout << item << std::endl;
 
     //Get OS buildver
     DWORD minver = 0;
     DWORD buildver = GetRealOSVersion(minver);
-    std::wcout << "[HWID] Build: " << buildver << "." <<minver << std::endl;
+    std::wcout << "[HWID] Build: " << buildver << "." << minver << std::endl;
 
     // Get id of CPU
     std::cout << "[HWID] CPU ID: " << std::endl;
@@ -80,74 +214,58 @@ int main()
     WmiQueryResult HDD_SSD = queryAndPrintResult(L"SELECT SerialNumber FROM Win32_PhysicalMedia", L"SerialNumber");
 
     std::string hardrives;
+    std::vector<std::string> hard_drives;
 
     for (const auto& item : HDD_SSD.ResultList)
     {
         std::wcout << item << std::endl;
-        hardrives = hardrives.append(sdk::wstring_to_string(item));
+        hardrives = hardrives.append(sdk::wstring_to_string(item) + " ");
+        hard_drives.push_back(sdk::wstring_to_string(item));
+    }
+    Sleep(10);
+
+    //HWID CHECK HOST
+    //open file check for cpu and harddrive IDs
+    //if true then terminate and close anything and check other hardwareids if not listed append to blacklist
+    //else start threads/looping and add his or her IDs only if a detection happened
+
+    sdk::host host_object(create_host_hwid_string(sdk::wstring_to_string(OS.ResultList.at(0)), sdk::wstring_to_string(CPU.ResultList.at(0)), hardrives));
+
+    //write_file(create_flagged_hwid_string(sdk::wstring_to_string(CPU.ResultList.at(0)), hardrives)); //TEMP to write hwdi into file for showcase
+    
+    /*if (open_file(sdk::wstring_to_string(CPU.ResultList.at(0)), hard_drives) == -2)
+    {
+        std::cout << "[MAIN] Terminating game..." << std::endl;
+        kill_process_by_name(game);
+        return 0;
+    }*/
+   
+    //Threads
+   while (true)
+   {
+        //Hackerconsole
+        HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+        SetConsoleTextAttribute(hConsole, 10); //10 is green
+        
+        std::thread t1(Process_loop);
+        std::thread t2(Is_protected_game_open_and_killable);
+        std::thread t3(String_Detection, std::ref(host_object));
+        std::thread t4(Get_open_window_titles_loop, std::ref(host_object));
+        std::thread t5(Search_window, std::ref(host_object));
+        std::thread t6(MemMod_Check, std::ref(host_object));
+
+        t1.join();
+        t2.join();
+        t3.join();
+        t4.join();
+        t5.join();
+        t6.join();
+
+        /*write_file(create_flagged_hwid_string(sdk::wstring_to_string(CPU.ResultList.at(0)), hardrives));
+        kill_process_by_name(game);*/
     }
 
-    //threads
-    std::thread t1(Process_loop);
-    std::thread t2(Get_open_window_titles_loop);
-
-    t1.join();
-    t2.join();
-
-
-    write_file(sdk::wstring_to_string(OS.ResultList.at(0)), sdk::wstring_to_string(CPU.ResultList.at(0)), hardrives);
-
-
-    //Hackerconsole
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleTextAttribute(hConsole, 10); //10 is green
-
-    //std::cout << "[MEMORY] Searching for strings in processmemory:" << std::endl;
-    //auto num_of_strings = 4; //Example
-    //auto memresults = 0;
-    //auto moduleresults = 0;
-    //const char* strings[] = { "Cheat Engine", "ReClass" , "Hex-Rays", "Aimbot"};
-
-    //for (size_t i = 0; i < num_of_strings; i++)
-    //{
-    //    std::cout << "[MEMORY] Searching for \"" << strings[i] << "\"" << std::endl;
-    //    memresults = memory::search_for_string(object.get_id(), strings[i], strlen(strings[i]));
-    //    std::cout << "[MEMORY] Found " << std::dec << memresults << " references." << std::endl << std::endl;
-    //}
-
-    //std::cout << "[MEMORY] Searching loaded DLL's" << std::endl;
-    //moduleresults = memory::detect_modules(object.get_id());
-    //std::cout << "[MEMORY] Found " << std::dec << moduleresults << " references." << std::endl << std::endl;
-
-    //if ((memresults || moduleresults) != 0)
-    //    object.set_flag(sdk::flags::Memory);
-
-    //for (auto item : sdk::processes_tuple)
-    //{
-    //    if (object.get_flag() == sdk::flags::Memory)
-    //    {
-    //        std::cout << "[BAN] Found Memorydetection" << std::endl;
-    //        kill_process_by_ID(std::get<1>(item));
-    //    }
-    //}
-
-    ////Can be removed just testing...
-    //Sleep(3000);
-
-    //margins window = find_game_window_and_resolution(L"csgo.exe");
-
-    //if (window.get_bottom_height() != 0)
-    //    screen_capture_part(window, "test.bmp");
-    //else
-    //    std::cout << "[GAME WINDOW] NOT OPEN!" << std::endl;
-   
-    ////OCR TEST
-    //ocr::execute_ocr();
-
-    ////Test for attaching CE
-    //debug_string_detection();
-
     system("pause");
-    
+
     return 0;
 }

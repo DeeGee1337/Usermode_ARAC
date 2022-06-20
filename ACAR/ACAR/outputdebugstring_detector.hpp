@@ -14,7 +14,6 @@ struct dbwin_buffer
 	char    data[4096 - sizeof(DWORD)];
 };
 
-//TODO -> RECLASS + IDA
 std::vector<std::string>blacklisted_debug_outputs =
 {
 	"Starting CE", //On startup
@@ -27,7 +26,7 @@ std::vector<std::string>blacklisted_debug_outputs =
 	"NVD3DREL:"
 };
 
-void debug_string_detection() 
+bool debug_string_detection()
 {
 	std::cout << "[OUTPUTDEBUG DETECTOR] Starting..." << std::endl;
 
@@ -40,7 +39,7 @@ void debug_string_detection()
 		if (!hevent_buffer_ready)
 		{
 			std::cout << "[OUTPUTDEBUG DETECTOR] Couldn't create DBWIN_BUFFER_READY" << std::endl;
-			return;
+			return false;
 		}
 	}
 
@@ -52,7 +51,7 @@ void debug_string_detection()
 		if (!hevent_data_ready)
 		{
 			std::cout << "[OUTPUTDEBUG DETECTOR] Couldn't create DBWIN_DATA_READY" << std::endl;
-			return;
+			return false;
 		}
 	}
 
@@ -64,7 +63,7 @@ void debug_string_detection()
 		if (!file_mapping)
 		{
 			std::cout << "[OUTPUTDEBUG DETECTOR] Couldn't create DBWIN_BUFFER" << std::endl;
-			return;
+			return false;
 		}
 	}
 
@@ -73,13 +72,14 @@ void debug_string_detection()
 	if (!buffer)
 	{
 		std::cout << "[OUTPUTDEBUG DETECTOR] Couldn't create buffer" << std::endl;
-		return;
+		return false;
 	}
 
 	std::cout << "[OUTPUTDEBUG DETECTOR] While True" << std::endl; // TODO -> Spawn a thread here
 
-	while (true) 
+	while (true)
 	{
+		bool breakval = false;
 		DWORD ret = WaitForSingleObject(hevent_data_ready, 1);
 
 		if (ret == WAIT_OBJECT_0) 
@@ -89,9 +89,13 @@ void debug_string_detection()
 				if (std::string(buffer->data).find(blacklisted_debug_output) != std::string::npos) 
 				{
 					printf("[OUTPUTDEBUG DETECTOR] Blacklisted output: %s\n", buffer->data);
+					return true;
 				}
 			}
 			SetEvent(hevent_buffer_ready);
+			break;
 		}
 	}
+
+	return false;
 }
