@@ -6,7 +6,7 @@
 #define WINDOWTITLE "WindowTitle.txt"
 #define OCRLIST "OCRList.txt"
 
-
+//Anton Halder
 bool check_OCRList(std::string ocrcontent) {
 	std::fstream file;
 	std::string str;
@@ -41,6 +41,7 @@ bool check_OCRList(std::string ocrcontent) {
 	return 1;
 }
 
+//Anton Halder
 const std::vector<std::string> search_file() {
 	std::fstream file;
 	std::string str;
@@ -62,6 +63,7 @@ const std::vector<std::string> search_file() {
 	}
 }
 
+//Anton Halder
 const std::vector<std::string> get_blacklisted_windows() {
 	std::fstream file;
 	std::string str;
@@ -84,6 +86,7 @@ const std::vector<std::string> get_blacklisted_windows() {
 
 }
 
+//Anton Halder
 int open_file(std::string cpu_id, std::vector<std::string> hard_drives) {
 	std::fstream file;
 	std::string content;
@@ -130,6 +133,7 @@ int open_file(std::string cpu_id, std::vector<std::string> hard_drives) {
 	return 0;
 }
 
+//Anton Halder
 int write_file(std::string hwid) {
 
 	std::fstream file;
@@ -150,6 +154,7 @@ int write_file(std::string hwid) {
 	return 0;
 }
 
+//Anton Halder
 std::string create_host_hwid_string(std::string os, std::string cpu_id, std::string hard_drive) {
 
 	std::string hwid = "OS: " + os.append(" CPU: " + cpu_id).append(" Harddrive: " + hard_drive + "\n");
@@ -157,6 +162,7 @@ std::string create_host_hwid_string(std::string os, std::string cpu_id, std::str
 	return hwid;
 }
 
+//Anton Halder
 std::string create_flagged_hwid_string(std::string cpu_id, std::string hard_drive) {
 
 	std::string hwid = "CPU: " + cpu_id.append(" Harddrive: " + hard_drive + "\n");
