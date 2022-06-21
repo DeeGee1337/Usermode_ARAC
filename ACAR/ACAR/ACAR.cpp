@@ -190,29 +190,36 @@ int main()
     std::cout << ">(.)__ <(.)__ =(.)__" << std::endl;
     std::cout << " (___/  (___/  (___/  \n\n" << std::endl;
 
+    //Fabian Folger
     // Get OS and partition
     std::cout << "[HWID] OS/PARTITION: " << std::endl;
     WmiQueryResult OS = queryAndPrintResult(L"SELECT * FROM Win32_OperatingSystem", L"Name");
 
+    //Anton Halder
     for (const auto& item : OS.ResultList)
         std::wcout << item << std::endl;
 
+    //Fabian Folger
     //Get OS buildver
     DWORD minver = 0;
     DWORD buildver = GetRealOSVersion(minver);
     std::wcout << "[HWID] Build: " << buildver << "." << minver << std::endl;
 
+    //Fabian Folger
     // Get id of CPU
     std::cout << "[HWID] CPU ID: " << std::endl;
     WmiQueryResult CPU = queryAndPrintResult(L"SELECT ProcessorId FROM Win32_Processor", L"ProcessorId");
 
+    //Anton Halder
     for (const auto& item : CPU.ResultList)
         std::wcout << item << std::endl;
 
+    //Fabian Folger
     // Get serial number of Hard Drive
     std::cout << "[HWID] HDD's/SSD's: " << std::endl;
     WmiQueryResult HDD_SSD = queryAndPrintResult(L"SELECT SerialNumber FROM Win32_PhysicalMedia", L"SerialNumber");
 
+    //Anton Halder
     std::string hardrives;
     std::vector<std::string> hard_drives;
 
@@ -222,13 +229,11 @@ int main()
         hardrives = hardrives.append(sdk::wstring_to_string(item) + " ");
         hard_drives.push_back(sdk::wstring_to_string(item));
     }
-    Sleep(10);
 
     //HWID CHECK HOST
     //open file check for cpu and harddrive IDs
     //if true then terminate and close anything and check other hardwareids if not listed append to blacklist
     //else start threads/looping and add his or her IDs only if a detection happened
-
     sdk::host host_object(create_host_hwid_string(sdk::wstring_to_string(OS.ResultList.at(0)), sdk::wstring_to_string(CPU.ResultList.at(0)), hardrives));
 
     //write_file(create_flagged_hwid_string(sdk::wstring_to_string(CPU.ResultList.at(0)), hardrives)); //TEMP to write hwdi into file for showcase
@@ -240,6 +245,7 @@ int main()
         return 0;
     }*/
    
+    //Christoph Sommer
     //Threads
    while (true)
    {

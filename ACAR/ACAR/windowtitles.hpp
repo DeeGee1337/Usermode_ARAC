@@ -2,6 +2,7 @@
 
 #include "globals.hpp"
 
+//Fabian Folger
 BOOL CALLBACK safe_window_topmost(HWND hwnd, LPARAM lParam) 
 {
     const DWORD TITLE_SIZE = 1024;
@@ -28,6 +29,7 @@ BOOL CALLBACK safe_window_topmost(HWND hwnd, LPARAM lParam)
     return TRUE;
 }
 
+//Fabian Folger
 BOOL CALLBACK safe_window(HWND hwnd, LPARAM lParam)
 {
     const DWORD TITLE_SIZE = 1024;
@@ -54,6 +56,7 @@ BOOL CALLBACK safe_window(HWND hwnd, LPARAM lParam)
     return TRUE;
 }
 
+//Fabian Folger
 bool get_open_window_titles()
 {
     std::vector<std::wstring> windows_blacklist;

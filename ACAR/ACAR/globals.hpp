@@ -40,7 +40,7 @@
 
 namespace sdk
 {
-    enum class flags
+    enum class flags //Anton
     {
         NONE = 0,
         Process = 1,
@@ -58,6 +58,7 @@ namespace sdk
         return str;
     }
 
+    //Fabian Folger
     std::vector<std::tuple<std::wstring, int>> processes_tuple;
     
     class host //Anton
@@ -92,7 +93,7 @@ namespace sdk
         }
     };
 
-    class process
+    class process //Fabian Folger
     {
     private:
         std::wstring name;

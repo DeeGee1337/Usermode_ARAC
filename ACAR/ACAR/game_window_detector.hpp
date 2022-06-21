@@ -10,6 +10,7 @@
 //http://bobmoore.mvps.org/Win32/w32tip72.htm
 //because topmost check was buggy
 
+//Christoph Sommer, Anton Halder, Fabian Folger
 UINT is_window_visible_to_user(HWND hWnd)
 {
     std::cout << "[GAME DECTECTOR] Cheking if window is visible to user..." << std::endl;
@@ -57,6 +58,7 @@ UINT is_window_visible_to_user(HWND hWnd)
     return uRetVal;
 }
 
+//Christoph Sommer, Anton Halder, Fabian Folger
 class margins
 {
 private:
@@ -122,6 +124,7 @@ public:
     }
 };
 
+//Christoph Sommer, Anton Halder, Fabian Folger
 margins find_game_window_and_resolution(std::wstring process)
 {
     margins gamewindow;

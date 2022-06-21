@@ -8,6 +8,7 @@
 #include "globals.hpp"
 #include "game_window_detector.hpp"
 
+//Christoph Sommer, Anton Halder, Fabian Folger
 bool save_bitmap(LPCSTR filename, HBITMAP bmp, HPALETTE pal)
 {
     bool result = false;
@@ -65,6 +66,7 @@ bool save_bitmap(LPCSTR filename, HBITMAP bmp, HPALETTE pal)
     return result;
 }
 
+//Christoph Sommer, Anton Halder, Fabian Folger
 bool screen_capture_part(margins inputwindow, LPCSTR fname) 
 {
     HDC hdcSource = GetDC(NULL);
@@ -76,7 +78,6 @@ bool screen_capture_part(margins inputwindow, LPCSTR fname)
     HBITMAP hBitmap = CreateCompatibleBitmap(hdcSource, inputwindow.get_top_hight(), inputwindow.get_bottom_height());
     HBITMAP hBitmapOld = (HBITMAP)SelectObject(hdcMemory, hBitmap);
 
-    //https://docs.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-bitblt
     BitBlt(hdcMemory, 0, 0, inputwindow.get_top_hight(), inputwindow.get_bottom_height(), hdcSource, inputwindow.get_left_with(), inputwindow.get_left_with(), SRCCOPY);
     hBitmap = (HBITMAP)SelectObject(hdcMemory, hBitmapOld);
 

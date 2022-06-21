@@ -3,6 +3,7 @@
 
 //https://tesseract-ocr.github.io/
 
+//Christoph Sommer, Anton Halder, Fabian Folger
 namespace ocr
 {
     bool execute_ocr()

@@ -2,6 +2,7 @@
 
 #include "globals.hpp"
 
+//Fabian Folger
 std::wstring print_processes(std::wstring searchinput)
 {
     HANDLE hProcessSnap;
@@ -80,10 +81,6 @@ std::wstring print_processes(std::wstring searchinput)
         if (dwPriorityClass)
             printf("\n  Priority class    = %d", dwPriorityClass);
 
-        //TODO
-        //List the modules and threads associated with this process
-        //ListProcessModules(pe32.th32ProcessID);
-        //ListProcessThreads(pe32.th32ProcessID);
 
     } while (Process32Next(hProcessSnap, &pe32));
 
@@ -92,6 +89,7 @@ std::wstring print_processes(std::wstring searchinput)
     return L"0";
 }
 
+//Fabian Folger
 DWORD find_processId(const std::wstring& processName)
 {
     PROCESSENTRY32 processInfo;
@@ -124,6 +122,7 @@ DWORD find_processId(const std::wstring& processName)
     return 0;
 }
 
+//Christoph Sommer
 void kill_process_by_name(const std::wstring& processName)
 {
     DWORD dwProcessId = find_processId(processName);
@@ -148,6 +147,7 @@ void kill_process_by_name(const std::wstring& processName)
     }
 }
 
+//Christoph Sommer
 void kill_process_by_ID(DWORD input_ID)
 {
     DWORD dwProcessId = input_ID;
