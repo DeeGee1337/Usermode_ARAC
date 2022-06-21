@@ -49,7 +49,7 @@ std::wstring print_processes(std::wstring searchinput)
                 return current;
             }
 
-            std::transform(current.begin(), current.end(), current.begin(),[](unsigned char c) { return std::tolower(c); }); //lmao hacky
+            std::transform(current.begin(), current.end(), current.begin(),[](unsigned char c) { return std::tolower(c); });
             std::wcout << "[PRCOESS] std::transform: " << current << std::endl;
 
             if (current.find(searchinput) != std::string::npos)

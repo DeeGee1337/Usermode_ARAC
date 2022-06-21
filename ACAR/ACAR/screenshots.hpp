@@ -75,10 +75,13 @@ bool screen_capture_part(margins inputwindow, LPCSTR fname)
     int capX = GetDeviceCaps(hdcSource, HORZRES);
     int capY = GetDeviceCaps(hdcSource, VERTRES);
 
+    //Creating Bitmap with our Size
     HBITMAP hBitmap = CreateCompatibleBitmap(hdcSource, inputwindow.get_top_hight(), inputwindow.get_bottom_height());
     HBITMAP hBitmapOld = (HBITMAP)SelectObject(hdcMemory, hBitmap);
 
+    //Screenshot capture
     BitBlt(hdcMemory, 0, 0, inputwindow.get_top_hight(), inputwindow.get_bottom_height(), hdcSource, inputwindow.get_left_with(), inputwindow.get_left_with(), SRCCOPY);
+    //Safe to Bitmapobject
     hBitmap = (HBITMAP)SelectObject(hdcMemory, hBitmapOld);
 
     DeleteDC(hdcSource);

@@ -1,5 +1,6 @@
 #include "globals.hpp"
 
+#define OUTPUTTOGGLE 1
 
 //globals for threads
 bool t1running = true;
@@ -8,6 +9,7 @@ bool t3running = false;
 bool t4running = false;
 bool t5running = false;
 bool t6running = false;
+bool toggle = true;
 std::mutex m_lock;
 bool canceloutput = false;
 
@@ -30,19 +32,23 @@ void Process_loop()
 
     while (t1running == true)
     {
-        //loop the vectorc
-        for (auto itt : processes)
-        {
-            std::wcout << "[THREAD1] Processing: " << itt << std::endl;
-            input = print_processes(itt);
 
-            if (input.at(0) != '0')
-            {
-                std::cout << "[THREAD1] Process found!" << std::endl;
-                sdk::process object(input);
-                processes_hits.push_back(object);
-            }
+    #if OUTPUTTOGGLE
+    //loop the vectorc
+    for (auto itt : processes)
+    {
+        std::wcout << "[THREAD1] Processing: " << itt << std::endl;
+        input = print_processes(itt);
+    
+        if (input.at(0) != '0')
+        {
+            std::cout << "[THREAD1] Process found!" << std::endl;
+            sdk::process object(input);
+            processes_hits.push_back(object);
         }
+    }
+    #endif
+
         m_lock.lock();
         t1running = false;
         t2running = true;
@@ -55,6 +61,7 @@ void Is_protected_game_open_and_killable()
 {
     while (t2running == true)
     {
+        #if OUTPUTTOGGLE
         auto processid = find_processId(game);
 
         if (processid)
@@ -66,6 +73,7 @@ void Is_protected_game_open_and_killable()
                 kill_process_by_ID(processid);
             }
         }
+        #endif
         m_lock.lock();
         t2running = false;
         t3running = true;
@@ -79,9 +87,8 @@ void String_Detection(sdk::host& host_object)
 {
     while (t3running == true)
     {
-        //EINKOMMENTIEREN
-        //if (debug_string_detection())
-         //   host_object.set_flag(sdk::flags::Driveroutput);
+        if (debug_string_detection())
+            host_object.set_flag(sdk::flags::Driveroutput);
 
         m_lock.lock();
         t3running = false;
@@ -97,11 +104,13 @@ void Get_open_window_titles_loop(sdk::host& host_object)
 {
     while (t4running == true)
     {
+        #if OUTPUTTOGGLE
         if (get_open_window_titles())
         {
             host_object.set_flag(sdk::flags::Windowname);
             canceloutput = true;
         }
+        #endif
 
         m_lock.lock();
         t4running = false;
@@ -116,6 +125,7 @@ void Search_window(sdk::host& host_object)
 {
     while (t5running == true)
     {
+        #if OUTPUTTOGGLE
         margins window = find_game_window_and_resolution(L"csgo.exe");
 
         if (window.get_bottom_height() != 0)
@@ -129,6 +139,7 @@ void Search_window(sdk::host& host_object)
             host_object.set_flag(sdk::flags::OCR);
             canceloutput = true;
         }
+        #endif
 
         m_lock.lock();
         t5running = false;
@@ -142,6 +153,7 @@ void MemMod_Check(sdk::host& host_object) {
 
     while (t6running == true)
     {
+        #if OUTPUTTOGGLE
         //cheatengine-x86_64.exe
         //elo.exe
         //ida64.exe
@@ -172,6 +184,7 @@ void MemMod_Check(sdk::host& host_object) {
             host_object.set_flag(sdk::flags::Module);
             canceloutput = true;
         }
+        #endif
 
         m_lock.lock();
         t6running = false;
@@ -235,15 +248,13 @@ int main()
     //if true then terminate and close anything and check other hardwareids if not listed append to blacklist
     //else start threads/looping and add his or her IDs only if a detection happened
     sdk::host host_object(create_host_hwid_string(sdk::wstring_to_string(OS.ResultList.at(0)), sdk::wstring_to_string(CPU.ResultList.at(0)), hardrives));
-
-    //write_file(create_flagged_hwid_string(sdk::wstring_to_string(CPU.ResultList.at(0)), hardrives)); //TEMP to write hwdi into file for showcase
     
-    /*if (open_file(sdk::wstring_to_string(CPU.ResultList.at(0)), hard_drives) == -2)
+    if (open_file(sdk::wstring_to_string(CPU.ResultList.at(0)), hard_drives) == -2)
     {
         std::cout << "[MAIN] Terminating game..." << std::endl;
         kill_process_by_name(game);
         return 0;
-    }*/
+    }
    
     //Christoph Sommer
     //Threads
@@ -267,8 +278,13 @@ int main()
         t5.join();
         t6.join();
 
-        /*write_file(create_flagged_hwid_string(sdk::wstring_to_string(CPU.ResultList.at(0)), hardrives));
-        kill_process_by_name(game);*/
+        if (canceloutput && toggle)
+        {
+            write_file(create_flagged_hwid_string(sdk::wstring_to_string(CPU.ResultList.at(0)), hardrives));
+            //kill_process_by_name(game);
+            std::cout << "[MAIN] Flags too high -> Kill game here and Ban" << std::endl;
+            toggle = false;
+        }
     }
 
     system("pause");

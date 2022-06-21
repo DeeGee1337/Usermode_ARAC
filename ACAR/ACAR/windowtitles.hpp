@@ -1,6 +1,10 @@
 #pragma once
 
 #include "globals.hpp"
+#include "filehandling.hpp"
+
+//https://stackoverflow.com/questions/10246444/how-can-i-get-enumwindows-to-list-all-windows
+//https://docs.microsoft.com/en-gb/windows/win32/api/winuser/nf-winuser-enumwindows?redirectedfrom=MSDN
 
 //Fabian Folger
 BOOL CALLBACK safe_window_topmost(HWND hwnd, LPARAM lParam) 
@@ -10,20 +14,19 @@ BOOL CALLBACK safe_window_topmost(HWND hwnd, LPARAM lParam)
 
     GetWindowTextW(hwnd, windowTitle, TITLE_SIZE);
 
+    //https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getwindowtextlengtha
     int length = ::GetWindowTextLength(hwnd);
     std::wstring title(&windowTitle[0]);
 
     LONG exStyle = GetWindowLongPtr(hwnd, GWL_EXSTYLE);
 
+    //Flags for AERO and Topmost overlays
     if (exStyle & WS_EX_TOPMOST && (exStyle & WS_EX_TRANSPARENT || exStyle & WS_EX_LAYERED))
     {
-        return TRUE; //topmost and aero + transparent
+        return TRUE;
     }
 
-    // Retrieve the pointer passed into this callback, and re-'type' it.
-    // The only way for a C API to pass arbitrary data is by means of a void*.
-    std::vector<std::wstring>& titles =
-        *reinterpret_cast<std::vector<std::wstring>*>(lParam);
+    std::vector<std::wstring>& titles = *reinterpret_cast<std::vector<std::wstring>*>(lParam);
     titles.push_back(title);
 
     return TRUE;
@@ -42,15 +45,13 @@ BOOL CALLBACK safe_window(HWND hwnd, LPARAM lParam)
 
     LONG exStyle = GetWindowLongPtr(hwnd, GWL_EXSTYLE);
 
+    //Flags for normal windowstitles
     if (!IsWindowVisible(hwnd) || length == 0 || title == L"Program Manager")
     {
-       return TRUE; //all open wiondows
+       return TRUE;
     }
 
-    // Retrieve the pointer passed into this callback, and re-'type' it.
-    // The only way for a C API to pass arbitrary data is by means of a void*.
-    std::vector<std::wstring>& titles =
-        *reinterpret_cast<std::vector<std::wstring>*>(lParam);
+    std::vector<std::wstring>& titles = *reinterpret_cast<std::vector<std::wstring>*>(lParam);
     titles.push_back(title);
 
     return TRUE;
@@ -59,9 +60,7 @@ BOOL CALLBACK safe_window(HWND hwnd, LPARAM lParam)
 //Fabian Folger
 bool get_open_window_titles()
 {
-    std::vector<std::wstring> windows_blacklist;
-    windows_blacklist.push_back(L"AeroOverlay dx");
-
+    std::vector<std::wstring> windows_blacklist = get_blacklisted_windows();
 
     std::wcout << "[WINDOW] Grabbing all open titles" << std::endl;
     std::vector<std::wstring> titles;
@@ -105,8 +104,6 @@ bool get_open_window_titles()
             }
         }
     }
-
-
 
     printf("\n");
 }

@@ -139,6 +139,7 @@ margins find_game_window_and_resolution(std::wstring process)
 		return gamewindow;
 	}
 
+    //CSGO Window
 	auto window = FindWindowA("Valve001", "Counter-Strike: Global Offensive - Direct3D 9");
 	if (window)
 	{

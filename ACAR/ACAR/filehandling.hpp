@@ -64,11 +64,11 @@ const std::vector<std::string> search_file() {
 }
 
 //Anton Halder
-const std::vector<std::string> get_blacklisted_windows() {
+std::vector<std::wstring> get_blacklisted_windows() {
 	std::fstream file;
 	std::string str;
 	std::string content;
-	std::vector<std::string> windowlist;
+	std::vector<std::wstring> windowlist;
 	file.open(WINDOWTITLE);
 	if (!file.is_open())
 	{
@@ -79,7 +79,8 @@ const std::vector<std::string> get_blacklisted_windows() {
 	{
 		while (std::getline(file, str))
 		{
-			windowlist.push_back(str);
+			std::wstring strconvert(str.begin(), str.end());
+			windowlist.push_back(strconvert);
 		}
 		return windowlist;
 	}

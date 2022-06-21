@@ -234,6 +234,7 @@ WmiQueryResult getWmiQueryResult(std::wstring wmiQuery, std::wstring propNameOfR
     return retVal;
 }
 
+//Abfrage der Komponenten mittels Querys
 WmiQueryResult queryAndPrintResult(std::wstring query, std::wstring propNameOfResultObject)
 {
     WmiQueryResult res;
@@ -262,6 +263,7 @@ typedef LONG NTSTATUS, * PNTSTATUS;
 
 typedef NTSTATUS(WINAPI* RtlGetVersionPtr)(PRTL_OSVERSIONINFOW);
 
+//Get OS version
 DWORD GetRealOSVersion(DWORD &minorver) {
     HMODULE hMod = ::GetModuleHandleW(L"ntdll.dll");
     if (hMod) {

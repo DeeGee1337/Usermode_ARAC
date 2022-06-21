@@ -1,5 +1,4 @@
 #pragma once
-
 #include "globals.hpp"
 
 //Because some Programs with only GUI use OutputDebugString
@@ -8,6 +7,7 @@
 // Programm to read:
 //https://docs.microsoft.com/en-us/sysinternals/downloads/debugview
 
+//Fabian Folger
 struct dbwin_buffer
 {
 	DWORD   dwProcessId;
@@ -28,8 +28,6 @@ std::vector<std::string>blacklisted_debug_outputs =
 
 bool debug_string_detection()
 {
-	std::cout << "[OUTPUTDEBUG DETECTOR] Starting..." << std::endl;
-
 	HANDLE hmutex = OpenMutexA(MUTEX_ALL_ACCESS, 0, "DBWinMutex");
 	HANDLE hevent_buffer_ready = OpenEventA(EVENT_ALL_ACCESS, 0, "DBWIN_BUFFER_READY");
 
@@ -75,26 +73,24 @@ bool debug_string_detection()
 		return false;
 	}
 
-	std::cout << "[OUTPUTDEBUG DETECTOR] While True" << std::endl; // TODO -> Spawn a thread here
+	bool breakval = false;
 
-	while (true)
+	//https://docs.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-waitforsingleobject
+	DWORD ret = WaitForSingleObject(hevent_data_ready, 1);
+
+	//printf("BUFFERDATA: %s \n", buffer->data);
+
+	if (ret == WAIT_OBJECT_0) 
 	{
-		bool breakval = false;
-		DWORD ret = WaitForSingleObject(hevent_data_ready, 1);
-
-		if (ret == WAIT_OBJECT_0) 
+		for (auto blacklisted_debug_output : blacklisted_debug_outputs) 
 		{
-			for (auto blacklisted_debug_output : blacklisted_debug_outputs) 
+			if (std::string(buffer->data).find(blacklisted_debug_output) != std::string::npos) 
 			{
-				if (std::string(buffer->data).find(blacklisted_debug_output) != std::string::npos) 
-				{
-					printf("[OUTPUTDEBUG DETECTOR] Blacklisted output: %s\n", buffer->data);
-					return true;
-				}
+				printf("[OUTPUTDEBUG DETECTOR] Blacklisted output: %s\n", buffer->data);
+				return true;
 			}
-			SetEvent(hevent_buffer_ready);
-			break;
 		}
+		SetEvent(hevent_buffer_ready);
 	}
 
 	return false;
