@@ -13,6 +13,8 @@ Generierung einer einzigartigen HardwareID für möglichen, zukünftigen Spielau
 Anti-Cheat executable protection via encryption um die Analyse zu erschweren.
 
 Features:
+- Automatisierte Screenshots mit BitBlt (Topmost check)
+- Auswertung der Screenshots mit OCR
 -	Automatisierte Erkennung der ProzessIDs
 -	Parsing der Windowtitles nach gesetzten Flags
 -	Terminierung von Reverse-Programme 
@@ -20,6 +22,7 @@ Features:
 -	Erstellen und Finden von Signaturen in der .rdata Sektion
 -	Geladene Module analysieren und bei Auffälligkeiten flaggen
 -	Executable Schutz vor Analysen und Reversen 
+
 Zeitkosten: (Insgesamt 450h)
 -	Prozesserkennung (20h)
 -	Reversing (60h)
