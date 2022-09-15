@@ -4,8 +4,7 @@ DAPI – Thema
 
 Projektname: 
 Windowsbasierte anti-tampering Software mit Toolerkennung von Reverseengineering-Programmen und  simples Anti-Cheat für Counter Strike: Global Offensive.
-Mitglieder: 
-Fabian Folger, Anton Halder, Christoph Sommer
+
 Ziel:
 Verhindern von Reverseengineering des Spiels um eine unerlaubte Modifikation zu vermeiden.
 Erkennung eines frei zugänglichen Cheats anhand von Modulen und Memorydumps.
@@ -22,6 +21,8 @@ Features:
 -	Erstellen und Finden von Signaturen in der .rdata Sektion
 -	Geladene Module analysieren und bei Auffälligkeiten flaggen
 -	Executable Schutz vor Analysen und Reversen 
+-	Auslesen und analysieren der Driveroutputs
+-	HWID Ban System
 
 Zeitkosten: (Insgesamt 450h)
 -	Prozesserkennung (20h)
