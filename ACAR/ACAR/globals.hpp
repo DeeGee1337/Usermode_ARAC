@@ -40,7 +40,7 @@
 
 namespace sdk
 {
-    enum class flags //Anton Halder
+    enum class flags
     {
         NONE = 0,
         Process = 1,
@@ -52,17 +52,15 @@ namespace sdk
         HWID = 7
     };
 
-    //Anton Halder
     std::string wstring_to_string(std::wstring input)
     {
         std::string str(input.begin(), input.end());
         return str;
     }
 
-    //Fabian Folger
     std::vector<std::tuple<std::wstring, int>> processes_tuple;
     
-    class host //Anton Halder
+    class host 
     {
     private:
         std::string hwid;
@@ -94,7 +92,7 @@ namespace sdk
         }
     };
 
-    class process //Fabian Folger
+    class process
     {
     private:
         std::wstring name;

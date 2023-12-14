@@ -8,7 +8,6 @@
 #include "globals.hpp"
 #include "game_window_detector.hpp"
 
-//Christoph Sommer, Anton Halder, Fabian Folger
 bool save_bitmap(LPCSTR filename, HBITMAP bmp, HPALETTE pal)
 {
     bool result = false;
@@ -66,7 +65,6 @@ bool save_bitmap(LPCSTR filename, HBITMAP bmp, HPALETTE pal)
     return result;
 }
 
-//Christoph Sommer, Anton Halder, Fabian Folger
 bool screen_capture_part(margins inputwindow, LPCSTR fname) 
 {
     HDC hdcSource = GetDC(NULL);

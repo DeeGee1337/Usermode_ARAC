@@ -4,7 +4,6 @@
 
 namespace memory
 {
-    //Fabian Folger, Anton Halder
     int detect_modules(DWORD processID)
     {
         auto results = 0;
@@ -54,7 +53,6 @@ namespace memory
         return results;
     }
 
-    //Fabian Folger, Anton Halder
     int search_for_string(DWORD pid, const char* data, size_t len)
     {
         int results = 0;

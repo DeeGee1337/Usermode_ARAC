@@ -203,36 +203,29 @@ int main()
     std::cout << ">(.)__ <(.)__ =(.)__" << std::endl;
     std::cout << " (___/  (___/  (___/  \n\n" << std::endl;
 
-    //Fabian Folger
     // Get OS and partition
     std::cout << "[HWID] OS/PARTITION: " << std::endl;
     WmiQueryResult OS = queryAndPrintResult(L"SELECT * FROM Win32_OperatingSystem", L"Name");
 
-    //Anton Halder
     for (const auto& item : OS.ResultList)
         std::wcout << item << std::endl;
 
-    //Fabian Folger
     //Get OS buildver
     DWORD minver = 0;
     DWORD buildver = GetRealOSVersion(minver);
     std::wcout << "[HWID] Build: " << buildver << "." << minver << std::endl;
 
-    //Fabian Folger
     // Get id of CPU
     std::cout << "[HWID] CPU ID: " << std::endl;
     WmiQueryResult CPU = queryAndPrintResult(L"SELECT ProcessorId FROM Win32_Processor", L"ProcessorId");
 
-    //Anton Halder
     for (const auto& item : CPU.ResultList)
         std::wcout << item << std::endl;
 
-    //Fabian Folger
     // Get serial number of Hard Drive
     std::cout << "[HWID] HDD's/SSD's: " << std::endl;
     WmiQueryResult HDD_SSD = queryAndPrintResult(L"SELECT SerialNumber FROM Win32_PhysicalMedia", L"SerialNumber");
 
-    //Anton Halder
     std::string hardrives;
     std::vector<std::string> hard_drives;
 
@@ -256,7 +249,6 @@ int main()
         return 0;
     }
    
-    //Christoph Sommer
     //Threads
    while (true)
    {
